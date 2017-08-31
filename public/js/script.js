@@ -77,11 +77,13 @@ module.exports = __webpack_require__(43);
 /***/ (function(module, exports) {
 
 $(function () {
-	var patternNoAp = /^[A-Z||a-z]{3,}$/; //Expresión regular para validar nombre y apellidos
+	var patternNoAp = /^[A-Za-z]{3,}(\s[A-Za-z]{3,})?/; //Expresión regular para validar nombre y apellidos
 	var patternEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/; //Expresión regular para validar email
 	var patternPw = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/; //Expresión regular para validar password
-	var ok = false; //Indica que el campo password está validado
-	var okNombre,
+	var ok,
+	    newOk,
+	    newOkRePassword,
+	    okNombre,
 	    okApellidos,
 	    okEmail,
 	    okPassword,
@@ -146,7 +148,6 @@ $(function () {
 			ok = true; //Se indica que el campo password es válido
 			okPassword = true;
 		}
-		console.log(ok);
 	});
 
 	// Se valida el campo Repite password
@@ -169,6 +170,53 @@ $(function () {
 	// Se comprueba que todos los campos estén validados
 	$("input[name='crear']").click(function (event) {
 		if (!okNombre || !okApellidos || !okEmail || !okPassword || !okRePassword) {
+			event.preventDefault();
+
+			$("#formError").show().delay(3000).fadeOut(1000);
+		}
+	});
+
+	/////////////////////////////////////////////////
+
+	/*
+ 	Valida las nuevas contraseñas introducidas
+ */
+
+	// Se valida el campo password
+	$("input[name='newPassword']").keyup(function () {
+		password = $(this).val();
+
+		if (!patternPw.test(password)) {
+			$("#resetPwError").text("Debe contener almenos un número, una mayúscula y una minúscula (8 caracteres como mínimo)");
+			newOk = false;
+			newOkPassword = false;
+		} else {
+			$("#resetPwError").text("");
+			newOk = true; //Se indica que el campo password es válido
+			newOkPassword = true;
+		}
+	});
+
+	// Se valida el campo Repite password
+	$("input[name='newRePassword']").keyup(function () {
+		if (newOk) {
+			pw = $("input[name='newPassword']").val();
+			rePw = $(this);
+			bColor = $(this).css("border-color");
+
+			if (pw !== rePw.val() && pw.length != 0) {
+				rePw.css("border-color", "red");
+				newOkRePassword = false;
+			} else {
+				rePw.css("border-color", bColor);
+				newOkRePassword = true;
+			}
+		}
+	});
+
+	// Se comprueba que todos los campos estén validados
+	$("input[name='reset']").click(function (event) {
+		if (!newOkPassword || !newOkRePassword) {
 			event.preventDefault();
 
 			$("#formError").show().delay(3000).fadeOut(1000);
