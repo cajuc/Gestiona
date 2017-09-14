@@ -12,10 +12,19 @@
 */
 
 Route::get('/', function () {
-    return view('acceso');
-});
+	return view('acceso');
+})->name('acceso');
+
+Route::get('inicio', 'ControllerMain@inicio');
+Route::get('ingresos', 'ControllerMain@ingresos');
+Route::delete('ingresos/{id}', 'ControllerMain@borrarIngreso');
 
 Route::post('registro', 'Acceso\ControllerAcceso@registro');
+/*
+	Route que maneja la petición cuando el usuario quiere salir de la Aplicación
+*/
+Route::post('logout', 'ControllerMain@logout');
+
 Route::get('auth/confirm/email/{email}/confirm_token/{confirm_token}','Acceso\ControllerAcceso@confirmRegister');
 Route::post('login', 'Acceso\ControllerAcceso@login');
 Route::get('forgetPassword', 'Acceso\ControllerAcceso@forgetPassword');

@@ -11,6 +11,7 @@ use Mail;
 
 class ControllerAcceso extends Controller
 {
+
 	/*
 		En esta función se lleva acabo la autenticación del usuario con sus credenciales
 		Si las credenciales no son correctas se devuelve un mensaje de error
@@ -19,8 +20,9 @@ class ControllerAcceso extends Controller
     	if (Auth::attempt([
     			'email' => $request->input('inicioEmail'), 
     			'password' => $request->input('inicioPassword'), 
-    			'actived' => 1])) {
-    		return view('inicio')->with('title', 'Inicio');
+    			'active' => 1])) {
+
+    		return redirect()->action('ControllerMain@inicio');
     	}else{
     		return redirect('/')->with([
     			'message' => 'El email/contraseña no son correctos o su cuenta aún no ha sido activada',

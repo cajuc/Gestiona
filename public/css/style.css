@@ -1,5 +1,24 @@
-.inicioTitle {
+.title {
   font-size: 50px;
+}
+
+.logout {
+  margin-top: 20px;
+}
+
+.brand-image {
+  width: 25px;
+  height: 25px;
+  margin-left: -15px;
+}
+
+.menu-nav {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.title-block {
+  color: #c97e0e;
 }
 
 .inicioContenedor {

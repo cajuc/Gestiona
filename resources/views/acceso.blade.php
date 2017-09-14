@@ -9,7 +9,7 @@
 	<body>
 		<div class="container">
 			<div class="row">
-				<h1 class="text-center inicioTitle">GESTIONA</h1>
+				<h1 class="text-center title">GESTIONA</h1>
 				<br>
 				<h3 class="text-center">
 				Con <b>GESTIONA</b> podrás realizar la gestión del hogar fácilmente. Tendrás el control tanto de los ingresos y gastos, y así ver cuanto eres capaz de ahorrar mes a mes.
