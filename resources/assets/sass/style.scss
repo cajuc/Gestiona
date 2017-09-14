@@ -1,3 +1,7 @@
+body{
+	padding-bottom: 20px;
+}
+
 .title{
 	font-size: 50px;
 }
@@ -29,3 +33,20 @@
 	padding-bottom: 40px;
 	border: 1px solid black;
 }
+
+.formEdit{
+	background-color: #c9f3ff;
+}
+
+.formEdit div{
+	padding-right: 0;
+}
+
+textarea{
+	resize: none;
+}
+
+.paginacion{
+	margin-top: -22px;
+}
+

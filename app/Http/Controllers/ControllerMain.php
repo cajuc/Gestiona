@@ -57,4 +57,22 @@ class ControllerMain extends Controller
 
 		return redirect()->back()->with('message', 'Se ha borrado correctamente.');
 	}
+
+	/*
+		Maneja la petición de editar un ingreso
+	*/
+	public function editarIngreso(Request $request, $id){
+		$ingreso = Ingreso::find($id);
+
+		// Se actualiza el ingreso con los valores introducidos
+		$ingreso->concepto = $request->concepto;
+		$ingreso->fecha = $request->fecha;
+		$ingreso->cantidad = $request->cantidad;
+		$ingreso->comentario = $request->comentario;
+
+		// Se guardan los cammbios
+		$ingreso->save();
+
+		return redirect()->back()->with('message', 'Se ha actualizado correctamente el ingreso.');
+	}
 }

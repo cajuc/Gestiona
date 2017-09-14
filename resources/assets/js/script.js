@@ -145,4 +145,35 @@ $(function () {
 			$("#formError").show().delay(3000).fadeOut(1000);
 		}
 	});
+
+
+	/////////////////////////////////////////////////
+
+	/*
+		Muestra el formulario para editar el ingreso seleccionado
+	*/
+	$(".editForm").click(function(event) {
+		$ingresoId = $(this).val();
+		$url = "ingresos/"
+
+		$("#formConcepto").val($("#concepto-"+$ingresoId).text());
+		$("#formFecha").val($("#fecha-"+$ingresoId).text());
+		$("#formCantidad").val($("#cantidad-"+$ingresoId+" span").text());
+		$("#formComentario").val($("#comentario-"+$ingresoId).text());
+
+		// Asignar el valor a la propiedad 'action' del formulario con el id del ingreso seleccionado
+		// $(".formEdit form").attr('action', );("/ingresos/" + $ingresoId + "/edit");
+		$(".formEdit form").attr('action', $url + $ingresoId + "/edit");
+
+		// Se despliega el formulario
+		$(".formEdit").fadeIn('slow');
+	});
+
+	/*
+		Oculta el formulario de edición de ingresos
+	*/
+	$("#cerrarForm").click(function(event) {
+		$(".formEdit").fadeOut('slow');
+	});
+
 });
