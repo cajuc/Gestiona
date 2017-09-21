@@ -27,13 +27,18 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Ingreso::class, function(Faker\Generator $faker){
-	$fecha = date('Y-m-d H:i:s');
+    $cantidad = $faker->numberBetween(800, 1100);
+
+    // Se actualiza los fondos del usuario
+    $user = App\User::find(1);
+    $user->fondos = $user->fondos + $cantidad;
+    $user->save();
 
 	return [
 		'concepto' => 'nomina',
 		'comentario' => $faker->realText($faker->numberBetween(30, 200)),
 		'fecha' => $faker->dateTime(),
-		'cantidad' => $faker->numberBetween(800, 1100),
+		'cantidad' => $cantidad,
 		'user_id' => 1
 	];
 });

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ingreso extends Model
 {
-	protected $guarded = ['user_id'];
+	protected $guarded = [];
 
     public function user(){
     	return $this->belongsTo('App\User');

@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 42);
+/******/ 	return __webpack_require__(__webpack_require__.s = 46);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 42:
+/***/ 46:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(43);
+module.exports = __webpack_require__(47);
 
 
 /***/ }),
 
-/***/ 43:
+/***/ 47:
 /***/ (function(module, exports) {
 
 $(function () {
@@ -250,6 +250,97 @@ $(function () {
  */
 	$("#cerrarForm").click(function (event) {
 		$(".formEdit").fadeOut('slow');
+	});
+
+	/////////////////////////////////////////////////
+
+	/*
+ 	Se asigna widget 'DATEPICKER' al campo fecha del formulario
+ */
+	$(".datepicker").datepicker({
+		dateFormat: "yy-mm-dd"
+	});
+
+	/////////////////////////////////////////////////
+
+	/*
+ 	Se obtiene los conceptos de ingresos del usuario
+ */
+
+	$(".dropdown-menu li").click(function (event) {
+		event.preventDefault;
+
+		$("#concepto").val($(this).text());
+	});
+
+	/*
+ 	Se le añade al campo 'concepto' del formulario de ingreso la funcionalidad para obtener una
+ 	lista de valores que el usario ha introducido anteriormente como concepto
+ */
+	var conceptos = [];
+	$.getJSON('/obtenerConceptos', function (data) {
+		$.each(data, function (index, val) {
+			conceptos.push(val['concepto']);
+			$("#concepto, #formConcepto").autocomplete({
+				source: conceptos
+			});
+		});
+	});
+
+	/////////////////////////////////////////////////
+
+	/*
+ 	Se genera el charts mostrando la evolución de los ingresos
+ */
+	// Función que devuelve el Chart que muestra la evolución de los ingresos en el año indicado
+	var widthChart = $("#chart-container").width(); // Ancho del contenedor CHART
+	var defaultYear = $("#year").val();
+
+	function getChart() {
+		var year = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultYear;
+
+		$.getJSON('/ingresosChart/' + year, function (data) {
+			var ingresos = [];
+			var fecha = "";
+
+			$.each(data, function (index, val) {
+				fecha = val.month < 10 ? val.year + "-0" + val.month : val.year + "-" + val.month;
+
+				ingresos.push({
+					label: fecha,
+					value: val.cantidad
+				});
+			});
+
+			$("#chart-container").insertFusionCharts({
+				type: "column2d",
+				width: widthChart,
+				height: "350",
+				dataFormat: "json",
+				dataSource: {
+					chart: {
+						caption: "Evolución del Año " + year,
+						subCaption: " ",
+						numberPrefix: "€",
+						showBorder: 0,
+						showCanvasBorder: 0,
+						divLineDashed: 1,
+						bgColor: "#ffffff",
+						theme: "fint"
+					},
+					data: ingresos
+				}
+			});
+		});
+	}
+
+	// Se muestra el Chart de evolución de ingresos cuando se carga el apartado Ingresos
+	getChart();
+
+	// Cuando se elija otro año se recargará con los datos correspondientes al año elegido
+	$("#year").change(function (event) {
+		var year = $(this).val();
+		getChart(year);
 	});
 });
 

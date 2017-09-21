@@ -16,8 +16,8 @@ class CreateIngresosTable extends Migration
         Schema::create('ingresos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('concepto', 30);
-            $table->string('comentario');
-            $table->date('fecha')->unique();
+            $table->string('comentario')->nullable();
+            $table->date('fecha');
             $table->float('cantidad');
             $table->timestamps();
         });

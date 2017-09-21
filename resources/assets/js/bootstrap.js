@@ -51,3 +51,9 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+
+// Render jquery-fusioncharts plugin
+window.FusionCharts = require('jquery-fusioncharts');
+// Load charts module to render Column2D chart
+window.Charts = require('fusioncharts/fusioncharts.charts');
+Charts(FusionCharts);

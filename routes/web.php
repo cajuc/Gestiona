@@ -19,6 +19,9 @@ Route::get('inicio', 'ControllerMain@inicio');
 Route::get('ingresos', 'ControllerMain@ingresos');
 Route::delete('ingresos/{id}', 'ControllerMain@borrarIngreso');
 Route::put('ingresos/{id}/edit', 'ControllerMain@editarIngreso');
+Route::post('ingresos/crear', 'ControllerMain@crearIngreso');
+Route::get('obtenerConceptos', 'ControllerMain@obtenerConceptos');
+Route::get('ingresosChart/{year}', 'ControllerMain@obtenerIngresos');
 
 Route::post('registro', 'Acceso\ControllerAcceso@registro');
 /*
