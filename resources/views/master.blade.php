@@ -17,7 +17,8 @@
 					<h1 class="title"><a href="{{ url('inicio') }}" style="text-decoration: none;color: #636B6F">GESTIONA</a></h1>
 				</div>
 				<div class="col-lg-5">
-					<h2 class="text-right">Bienvenido <b>{{ Auth::user()->name }}</b></h2>
+					<h2 class="text-right">Bienvenido <b>{{ $user->name }}</b></h2>
+					<span class="pull-right"><b>{{ $user->fondos }}€</b> disponibles</span>
 				</div>
 				<div class="col-lg-1 logout">
 					<form action="logout" method="post">
@@ -26,6 +27,7 @@
 					</form>
 				</div>
 			</div>
+			<br>
 			<div class="menu-nav">
 				<nav class="nav navbar-default">
 					<div class="container-fluid">

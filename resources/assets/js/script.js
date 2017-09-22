@@ -11,6 +11,7 @@ $(function () {
 		okPassword,
 		okRePassword	= false;
 	var validado		= false;	//Indica que el formulario está validado
+	var url = window.location;		// Se obtiene la url actual de la pagina
 
 	// Se valida que el nombre introducido cumpla las condiciones
 	$("input[name='registroNombre']").keyup(function(){
@@ -150,27 +151,31 @@ $(function () {
 	/////////////////////////////////////////////////
 
 	/*
-		Muestra el formulario para editar el ingreso seleccionado
+		Muestra el formulario para editar el ingreso/gasto seleccionado
 	*/
 	$(".editForm").click(function(event) {
-		$ingresoId = $(this).val();
-		$url = "ingresos/"
+		var id = $(this).val();
+		var url = window.location.pathname.substring(1, window.location.pathname.length) + "/";
 
-		$("#formConcepto").val($("#concepto-"+$ingresoId).text());
-		$("#formFecha").val($("#fecha-"+$ingresoId).text());
-		$("#formCantidad").val($("#cantidad-"+$ingresoId+" span").text());
-		$("#formComentario").val($("#comentario-"+$ingresoId).text());
+		if (url === 'gastos/') {
+			$("#formTipo").val($("#tipo-"+id).text());
+		}
+
+		$("#formConcepto").val($("#concepto-"+id).text());
+		$("#formFecha").val($("#fecha-"+id).text());
+		$("#formCantidad").val($("#cantidad-"+id+" span").text());
+		$("#formComentario").val($("#comentario-"+id).text());
 
 		// Asignar el valor a la propiedad 'action' del formulario con el id del ingreso seleccionado
-		// $(".formEdit form").attr('action', );("/ingresos/" + $ingresoId + "/edit");
-		$(".formEdit form").attr('action', $url + $ingresoId + "/edit");
+		// $(".formEdit form").attr('action', );("/id/" + id + "/edit");
+		$(".formEdit form").attr('action', url + id + "/edit");
 
 		// Se despliega el formulario
 		$(".formEdit").fadeIn('slow');
 	});
 
 	/*
-		Oculta el formulario de edición de ingresos
+		Oculta el formulario de edición de ingresos/gastos
 	*/
 	$("#cerrarForm").click(function(event) {
 		$(".formEdit").fadeOut('slow');
@@ -188,13 +193,44 @@ $(function () {
 	/////////////////////////////////////////////////
 
 	/*
-		Se obtiene los conceptos de ingresos del usuario
+		Se obtiene los conceptos de ingresos/gastos del usuario
+	*/
+	$("#dropdownConcepto").hide();
+
+	$(".dropdown-menu, .dropdown-menu .concepto").on('click', '.concepto', function(event) {
+		event.preventDefault;
+		
+		$("#concepto").val($(this).text());
+		$("#dropdown-menu").toggle();
+	});
+
+	/*
+		Se obtiene los tipos de gasto del usuario
 	*/
 
-	$(".dropdown-menu li").click(function(event) {
+	$(".dropdown-menu .tipo").click(function(event) {
 		event.preventDefault;
+		var tipo = $(this).text();
 
-		$("#concepto").val($(this).text());
+		$("#tipo, #tipoConcepto").val($(this).text());
+
+		// Se carga los conceptos en base al tipo de concepto seleccionado
+		$.getJSON('obtenerConceptos/gastos/tipo/'+tipo, function(data) {
+			// Primero se eliminan, si hubieran, los conceptos existentes
+			$("#dropdownConcepto li").remove();
+			
+			$.each(data, function(index, val) {
+				conceptos.push(val['concepto']);
+
+				$("<li>").append($("<a>").text(val['concepto']).addClass('concepto')).appendTo('#dropdownConcepto');
+			});
+
+			$("#concepto, #formConcepto").autocomplete({
+				source: conceptos
+			});
+
+			$("#dropdownConcepto").removeAttr('style');
+		});	
 	});
 
 	/*
@@ -202,14 +238,19 @@ $(function () {
 		lista de valores que el usario ha introducido anteriormente como concepto
 	*/
 	var conceptos = [];
-	$.getJSON('/obtenerConceptos', function(data) {
-		$.each(data, function(index, val) {
-			conceptos.push(val['concepto']);
+	var uri = url.pathname.substring(1, url.pathname.length);
+
+	if (uri !== 'gastos') {
+		$.getJSON('obtenerConceptos/'+uri, function(data) {
+			$.each(data, function(index, val) {
+				conceptos.push(val['concepto']);
+			});
+
 			$("#concepto, #formConcepto").autocomplete({
 				source: conceptos
 			});
 		});
-	});
+	}
 
 	/////////////////////////////////////////////////
 
@@ -219,16 +260,17 @@ $(function () {
 	// Función que devuelve el Chart que muestra la evolución de los ingresos en el año indicado
 	var widthChart = $("#chart-container").width();	// Ancho del contenedor CHART
 	var defaultYear = $("#year").val();
+	var url = window.location.pathname;
 
 	function getChart(year = defaultYear){
-		$.getJSON('/ingresosChart/'+year, function(data) {
-			var ingresos = [];
+		$.getJSON(url+'Chart/'+year, function(data) {
+			var datos = [];
 			var fecha = "";
 			
 			$.each(data, function(index, val){
 				fecha = (val.month < 10) ? val.year + "-0" + val.month : val.year +  "-" + val.month;
 
-				ingresos.push({
+				datos.push({
 					label: fecha,
 					value: val.cantidad
 				});
@@ -251,7 +293,7 @@ $(function () {
 			            bgColor:"#ffffff",
 			            theme: "fint"
 			        },
-			        data: ingresos
+			        data: datos
 		    	}
 			});
 		});

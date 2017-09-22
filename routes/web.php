@@ -15,13 +15,18 @@ Route::get('/', function () {
 	return view('acceso');
 })->name('acceso');
 
-Route::get('inicio', 'ControllerMain@inicio');
+Route::get('inicio', 'ControllerMain@inicio')->name('inicio');
 Route::get('ingresos', 'ControllerMain@ingresos');
 Route::delete('ingresos/{id}', 'ControllerMain@borrarIngreso');
 Route::put('ingresos/{id}/edit', 'ControllerMain@editarIngreso');
 Route::post('ingresos/crear', 'ControllerMain@crearIngreso');
-Route::get('obtenerConceptos', 'ControllerMain@obtenerConceptos');
+Route::get('obtenerConceptos/{table}', 'ControllerMain@obtenerConceptos');
+Route::get('obtenerConceptos/{table}/tipo/{tipo}', 'ControllerMain@obtenerConceptos');
 Route::get('ingresosChart/{year}', 'ControllerMain@obtenerIngresos');
+Route::get('gastos', 'ControllerMain@gastos');
+Route::delete('gastos/{id}', 'ControllerMain@borrarGasto');
+Route::put('gastos/{id}/edit', 'ControllerMain@editarGasto');
+Route::post('gastos/crear', 'ControllerMain@crearGasto');
 
 Route::post('registro', 'Acceso\ControllerAcceso@registro');
 /*

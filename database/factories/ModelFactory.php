@@ -28,17 +28,36 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Ingreso::class, function(Faker\Generator $faker){
     $cantidad = $faker->numberBetween(800, 1100);
-
+    $concepto = ['nomina', 'acciones', 'pension', 'alquileres'];
     // Se actualiza los fondos del usuario
     $user = App\User::find(1);
     $user->fondos = $user->fondos + $cantidad;
     $user->save();
 
 	return [
-		'concepto' => 'nomina',
+		'concepto' => $concepto[rand(0,3)],
 		'comentario' => $faker->realText($faker->numberBetween(30, 200)),
 		'fecha' => $faker->dateTime(),
 		'cantidad' => $cantidad,
-		'user_id' => 1
+		'user_id' => $user->id
 	];
+});
+
+$factory->define(App\Gasto::class, function(Faker\Generator $faker){
+    $cantidad = $faker->numberBetween(20, 250);
+    $concepto = ['compra mercadona', 'letra del prestamo', 'luz', 'agua'];
+    $tipo = ['fijo', 'variable', 'fijo-variable'];
+    // Se actualiza los fondos del usuario
+    $user = App\User::find(1);
+    $user->fondos = $user->fondos - $cantidad;
+    $user->save();
+
+    return [
+        'concepto' => $concepto[rand(0,3)],
+        'tipo' => $tipo[rand(0,2)],
+        'comentario' => $faker->realText($faker->numberBetween(30, 200)),
+        'fecha' => $faker->dateTime(),
+        'cantidad' => $cantidad,
+        'user_id' => $user->id
+    ];
 });

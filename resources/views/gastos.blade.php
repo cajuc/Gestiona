@@ -3,7 +3,7 @@
 @section('content-body')
 <div class="row">
 	<div class="col-lg-7">
-		<h2 class="title-block">Historial de Ingresos</h2>
+		<h2 class="title-block">Historial de Gastos</h2>
 		@if (Session::get('message'))
 		@if (Session::get('class'))
 		<div class="alert text-center {{ Session::get('class') }}" role="alert">
@@ -19,6 +19,7 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
+						<th>Tipo</th>
 						<th>Concepto</th>
 						<th>Fecha</th>
 						<th>Cantidad</th>
@@ -27,23 +28,24 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach ($ingresos as $ingreso)
+					@foreach ($gastos as $gasto)
 					<tr>
-						<td class="text-capitalize" id="concepto-{{ $ingreso->id }}">{{ $ingreso->concepto }}</td>
-						<td id="fecha-{{ $ingreso->id }}">{{ $ingreso->fecha }}</td>
-						<td id="cantidad-{{ $ingreso->id }}"><span>{{ $ingreso->cantidad }}</span> €</td>
-						<td class="text-justify" id="comentario-{{ $ingreso->id }}">{{ $ingreso->comentario }}</td>
+						<td class="text-capitalize" id="tipo-{{ $gasto->id }}">{{ $gasto->tipo }}</td>
+						<td class="text-capitalize" id="concepto-{{ $gasto->id }}">{{ $gasto->concepto }}</td>
+						<td id="fecha-{{ $gasto->id }}">{{ $gasto->fecha }}</td>
+						<td id="cantidad-{{ $gasto->id }}"><span>{{ $gasto->cantidad }}</span> €</td>
+						<td class="text-justify" id="comentario-{{ $gasto->id }}">{{ $gasto->comentario }}</td>
 						<td>
 							<div class="btn-toolbar" role="toolbar">
 								<div class="btn-group">
-									<form action="{{ url('ingresos') }}/{{ $ingreso->id }}" method="post">
+									<form action="{{ url('gastos') }}/{{ $gasto->id }}" method="post">
 										{{ method_field('DELETE') }}
 										{{ csrf_field() }}
 										<button type="submit" class="btn btn-default btn-sm" title="Borrar">
 										<span style="color: red" class="glyphicon glyphicon-trash"></span>
 										</button>
 									</form>
-									<button class="btn btn-default btn-sm editForm" type="button" title="Editar" value="{{ $ingreso->id }}">
+									<button class="btn btn-default btn-sm editForm" type="button" title="Editar" value="{{ $gasto->id }}">
 									<span style="color: blue" class="glyphicon glyphicon-edit"></span>
 									</button>
 								</div>
@@ -55,6 +57,11 @@
 						<form action="" method="post">
 							{{ method_field('PUT') }}
 							{{ csrf_field() }}
+							<td>
+								<div class="form-group">
+									<input type="text" class="form-control" id="formTipo" name="tipo">
+								</div>
+							</td>
 							<td>
 								<div class="form-group">
 									<input type="text" class="form-control" id="formConcepto" name="concepto">
@@ -92,13 +99,13 @@
 					</tr>
 				</tbody>
 			</table>
-			<nav class="text-center paginacion" aria-label="mostrar ingresos">
-				{{ $ingresos->links() }}
+			<nav class="text-center paginacion" aria-label="mostrar gastos">
+				{{ $gastos->links() }}
 			</nav>
 		</div>
 	</div>
 	<div class="col-lg-5">
-		<h2 class="title-block">Evolución de Ingresos</h2>
+		<h2 class="title-block">Evolución de Gastos</h2>
 		<br>
 		<div class="row">
 			<div id="chart-container" class="col-lg-12 col-xs-12"></div>
@@ -124,7 +131,7 @@
 </div>
 <div class="row">
 	<div class="col-lg-7">
-		<h2 class="title-block">Crear nuevo ingreso</h2>
+		<h2 class="title-block">Crear nuevo gasto</h2>
 		<br>
 		@if ($errors->any())
 		<div class="alert alert-danger">
@@ -136,8 +143,26 @@
 		</div>
 		@endif
 		<div class="row">
-			<form action="{{ url('/') }}/ingresos/crear" method="post">
+			<form action="{{ url('/') }}/gastos/crear" method="post">
 				{{ csrf_field() }}
+				<div class="col-lg-3">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Elegir tipo">
+								<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									@foreach ($tipos as $tipo)
+									<li><a class="tipo">{{ $tipo->tipo }}</a></li>
+									@endforeach
+								</ul>
+							</div>
+							<input id="tipoConcepto" type="text" name="tipoConcepto" placeholder="Tipo" class="form-control" disabled>
+							<input type="hidden" name="tipo" id="tipo">
+						</div>
+					</div>
+				</div>
 				<div class="col-lg-4">
 					<div class="form-group">
 						<div class="input-group">
@@ -145,11 +170,7 @@
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Elegir concepto">
 								<span class="caret"></span>
 								</button>
-								<ul class="dropdown-menu">
-									@foreach ($conceptos as $concepto)
-									<li><a class="concepto">{{ $concepto->concepto }}</a></li>
-									@endforeach
-								</ul>
+								<ul class="dropdown-menu" id="dropdownConcepto"></ul>
 							</div>
 							<input id="concepto" type="text" name="concepto" placeholder="Concepto" class="form-control">
 						</div>
@@ -160,9 +181,9 @@
 						<input type="date" name="fecha" value="{{ date("Y-m-d") }}" class="form-control datepicker">
 					</div>
 				</div>
-				<div class="col-lg-3">
+				<div class="col-lg-2">
 					<div class="form-group">
-						<input type="number" name="cantidad" min="0" placeholder="Cantidad" class="form-control">
+						<input type="number" name="cantidad" min="0" placeholder="€" title="Cantidad" class="form-control">
 					</div>
 				</div>
 				<div class="clearfix"></div>
@@ -172,7 +193,7 @@
 					</div>
 				</div>
 				<div class="col-lg-12">
-					<input type="submit" name="crearIngreso" value="Nuevo Ingreso" class="btn btn-lg btn-block btn-success">
+					<input type="submit" name="crearIngreso" value="Nuevo Gasto" class="btn btn-lg btn-block btn-success">
 				</div>
 			</form>
 		</div>
