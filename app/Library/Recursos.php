@@ -99,4 +99,20 @@ class Recursos
 
         return $tipos;
     }
+
+    public static function obtenerGastosChart($year)
+    {
+        $user = Auth::user();
+
+        // Se obtienen los ingresos del usuario
+        $gastos = $user->gastos()
+            ->select(DB::raw("SUM(cantidad) as cantidad, MONTH(fecha) as month"), 'tipo')
+            ->where(DB::raw("YEAR(fecha)"), $year)
+            ->groupBy(DB::raw("MONTH(fecha)"), 'tipo')
+            ->orderBy(DB::raw('MONTH(fecha)'), 'asc')
+            ->orderBy('tipo')
+            ->get();
+
+        return $gastos;
+    }
 }

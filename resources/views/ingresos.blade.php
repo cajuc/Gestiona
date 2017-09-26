@@ -5,15 +5,24 @@
 	<div class="col-lg-7">
 		<h2 class="title-block">Historial de Ingresos</h2>
 		@if (Session::get('message'))
-		@if (Session::get('class'))
-		<div class="alert text-center {{ Session::get('class') }}" role="alert">
-			{{ Session::get('message') }}
-		</div>
-		@else
-		<div class="alert alert-success text-center" role="alert">
-			{{ Session::get('message') }}
-		</div>
+			@if (Session::get('class'))
+			<div class="alert text-center {{ Session::get('class') }}" role="alert">
+				{{ Session::get('message') }}
+			</div>
+			@else
+			<div class="alert alert-success text-center" role="alert">
+				{{ Session::get('message') }}
+			</div>
+			@endif
 		@endif
+		@if ($errors->any())
+		<div class="alert alert-danger">
+			<ul>
+				@foreach ($errors->all() as $error)
+				<li>{{ $error }}</li>
+				@endforeach
+			</ul>
+		</div>
 		@endif
 		<div class="table-responsive">
 			<table class="table table-striped">
@@ -101,7 +110,7 @@
 		<h2 class="title-block">Evolución de Ingresos</h2>
 		<br>
 		<div class="row">
-			<div id="chart-container" class="col-lg-12 col-xs-12"></div>
+			<div id="chartColumn-container" class="col-lg-12 col-xs-12"></div>
 		</div>
 		<br>
 		<div class="row">
@@ -126,15 +135,6 @@
 	<div class="col-lg-7">
 		<h2 class="title-block">Crear nuevo ingreso</h2>
 		<br>
-		@if ($errors->any())
-		<div class="alert alert-danger">
-			<ul>
-				@foreach ($errors->all() as $error)
-				<li>{{ $error }}</li>
-				@endforeach
-			</ul>
-		</div>
-		@endif
 		<div class="row">
 			<form action="{{ url('/') }}/ingresos/crear" method="post">
 				{{ csrf_field() }}

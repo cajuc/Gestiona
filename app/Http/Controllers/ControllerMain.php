@@ -95,10 +95,7 @@ class ControllerMain extends Controller
 
 		// En caso de error se devolverán los errores producidos
 		if ($validator->fails()) {
-			return redirect()->back()->with([
-				'class' => 'alert-danger',
-				'message' => 'Ya existe un ingreso con el concepto y fecha introducidos.'
-			]);
+			return redirect()->back()->withErrors($validator);
 		}
 
 		$ingreso = Ingreso::find($id);
@@ -182,7 +179,7 @@ class ControllerMain extends Controller
 	/*
 		Se obtienen los ingresos del usuario y se devuelven en formato JSON
 	*/
-	public function obtenerIngresos(Request $request, $year){
+	public function obtenerIngresos($year){
 		$ingresos = Recursos::obtenerIngresosChart($year);
 
 		return response()->json($ingresos);
@@ -238,12 +235,14 @@ class ControllerMain extends Controller
 			'concepto' 		=> [
 				'required',
 				'max:30',
-				Rule::unique('gastos')->where(function($query) use ($request){
+				Rule::unique('gastos')->where(function($query) use ($request, $id){
 					$query
 						->where([
 							['tipo', $request->tipo],
 							['concepto', $request->concepto],
-							['id', '<>', $request->id]
+							[\DB::raw("YEAR(fecha)"), substr($request->fecha, 0, 4)],
+							[\DB::raw("MONTH(fecha)"), substr($request->fecha, 6, 2)],
+							['id', '<>', $id]
 						]);
 				}),
 			],
@@ -296,11 +295,13 @@ class ControllerMain extends Controller
 		Maneja la petición de crear un nuevo ingreso
 	*/
 	public function crearGasto(Request $request){
+		$user = Auth::user();
+
 		$validator = Validator::make($request->all(), [
 			'tipo'			=> 'required',
 			'concepto' 		=> 'required|max:30',
 			'fecha'			=> 'required|date_format:Y-m-d',
-			'cantidad'		=> 'required|numeric'
+			'cantidad'		=> 'required|numeric|max:'.$user->fondos
 		]);
 
 		// En caso de que los campos concepto y fecha introducidos existan en algún ingreso se informará del error
@@ -335,9 +336,18 @@ class ControllerMain extends Controller
 
 		// Se actualiza los fondos del usuario
 		$user = Auth::user();
-		$user->fondos = $user->fondos + $gasto->cantidad;
+		$user->fondos = $user->fondos - $gasto->cantidad;
 		$user->save();
 
 		return redirect()->back()->with('message', 'Se ha creado un nuevo gasto.');
+	}
+
+	/*
+		Se obtienen los gastos del usuario y se devuelven en formato JSON
+	*/
+	public function obtenerGastos($year){
+		$gastos = Recursos::obtenerGastosChart($year);
+
+		return response()->json($gastos);
 	}
 }

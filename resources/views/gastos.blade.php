@@ -2,18 +2,27 @@
 @section('title', $title)
 @section('content-body')
 <div class="row">
-	<div class="col-lg-7">
+	<div class="col-lg-8">
 		<h2 class="title-block">Historial de Gastos</h2>
 		@if (Session::get('message'))
-		@if (Session::get('class'))
-		<div class="alert text-center {{ Session::get('class') }}" role="alert">
-			{{ Session::get('message') }}
-		</div>
-		@else
-		<div class="alert alert-success text-center" role="alert">
-			{{ Session::get('message') }}
-		</div>
+			@if (Session::get('class'))
+			<div class="alert text-center {{ Session::get('class') }}" role="alert">
+				{{ Session::get('message') }}
+			</div>
+			@else
+			<div class="alert alert-success text-center" role="alert">
+				{{ Session::get('message') }}
+			</div>
+			@endif
 		@endif
+		@if ($errors->any())
+		<div class="alert alert-danger">
+			<ul>
+				@foreach ($errors->all() as $error)
+				<li>{{ $error }}</li>
+				@endforeach
+			</ul>
+		</div>
 		@endif
 		<div class="table-responsive">
 			<table class="table table-striped">
@@ -41,7 +50,7 @@
 									<form action="{{ url('gastos') }}/{{ $gasto->id }}" method="post">
 										{{ method_field('DELETE') }}
 										{{ csrf_field() }}
-										<button type="submit" class="btn btn-default btn-sm" title="Borrar">
+										<button type="submit" class="btn btn-default btn-sm .borrar" title="Borrar">
 										<span style="color: red" class="glyphicon glyphicon-trash"></span>
 										</button>
 									</form>
@@ -85,7 +94,7 @@
 							<td>
 								<div class="btn-toolbar" role="toolbar">
 									<div class="btn-group">
-										<button class="btn btn-default btn-sm" type="submit" title="Editar">
+										<button class="btn btn-default btn-sm .editar" type="submit" title="Editar">
 										<span style="color: blue" class="glyphicon glyphicon-edit"></span>
 										</button>
 										<span></span>
@@ -104,11 +113,15 @@
 			</nav>
 		</div>
 	</div>
-	<div class="col-lg-5">
+	<div class="col-lg-4">
 		<h2 class="title-block">Evolución de Gastos</h2>
 		<br>
 		<div class="row">
-			<div id="chart-container" class="col-lg-12 col-xs-12"></div>
+			<div id="chartStacked-container" class="col-lg-12 col-xs-12"></div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-lg-12 col-xs-12" id="chartBar-container"></div>
 		</div>
 		<br>
 		<div class="row">
@@ -130,18 +143,9 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-7">
+	<div class="col-lg-8">
 		<h2 class="title-block">Crear nuevo gasto</h2>
 		<br>
-		@if ($errors->any())
-		<div class="alert alert-danger">
-			<ul>
-				@foreach ($errors->all() as $error)
-				<li>{{ $error }}</li>
-				@endforeach
-			</ul>
-		</div>
-		@endif
 		<div class="row">
 			<form action="{{ url('/') }}/gastos/crear" method="post">
 				{{ csrf_field() }}

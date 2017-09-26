@@ -198,7 +198,7 @@ $(function () {
 	$("#dropdownConcepto").hide();
 
 	$(".dropdown-menu, .dropdown-menu .concepto").on('click', '.concepto', function(event) {
-		event.preventDefault;
+		event.preventDefault();
 		
 		$("#concepto").val($(this).text());
 		$("#dropdown-menu").toggle();
@@ -209,7 +209,7 @@ $(function () {
 	*/
 
 	$(".dropdown-menu .tipo").click(function(event) {
-		event.preventDefault;
+		event.preventDefault();
 		var tipo = $(this).text();
 
 		$("#tipo, #tipoConcepto").val($(this).text());
@@ -260,42 +260,132 @@ $(function () {
 	// Función que devuelve el Chart que muestra la evolución de los ingresos en el año indicado
 	var widthChart = $("#chart-container").width();	// Ancho del contenedor CHART
 	var defaultYear = $("#year").val();
-	var url = window.location.pathname;
 
 	function getChart(year = defaultYear){
-		$.getJSON(url+'Chart/'+year, function(data) {
+		$.getJSON(uri+'Chart/'+year, function(data) {
 			var datos = [];
-			var fecha = "";
-			
-			$.each(data, function(index, val){
-				fecha = (val.month < 10) ? val.year + "-0" + val.month : val.year +  "-" + val.month;
+			var values = [];
+			var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-				datos.push({
-					label: fecha,
-					value: val.cantidad
-				});
-			});
-			
-			
-			$("#chart-container").insertFusionCharts({
-			    type: "column2d",
-			    width: widthChart,
-			    height: "350",
-			    dataFormat: "json",
-			    dataSource: {
-			        chart: {
-			        	caption: "Evolución del Año " + year,
-			        	subCaption: " ",
-			            numberPrefix: "€",
-			            showBorder: 0,
-			            showCanvasBorder: 0,
-			            divLineDashed: 1,
-			            bgColor:"#ffffff",
-			            theme: "fint"
-			        },
-			        data: datos
-		    	}
-			});
+			switch(uri){
+				case 'ingresos':
+					$.each(data, function(index, val){
+						// Se añade un nuevo objeto al array datos
+						datos.push({
+							label: meses[val.month],
+							value: val.cantidad
+						});
+					});
+
+					$("#chartColumn-container").insertFusionCharts({
+					    type: "column2d",
+					    width: widthChart,
+					    height: "350",
+					    dataFormat: "json",
+					    dataSource: {
+					        chart: {
+					        	caption: "Evolución del Año " + year,
+					        	subCaption: " ",
+					            numberPrefix: "€",
+					            showBorder: 0,
+					            showCanvasBorder: 0,
+					            divLineDashed: 1,
+					            bgColor:"#ffffff",
+					            theme: "fint",
+					            plotBorderAlpha: 10,
+					        },
+					        data: datos
+				    	}
+					});
+
+					break;
+				case 'gastos':
+					var categorias = [];
+					var aux = {};
+					var seriesname = [];
+					var ok = true;
+
+					$.each(data, function(index, val) {
+						if (aux.month != val.month) {
+							// Se añade una nueva categoria
+							categorias.push({
+								label: meses[val.month]
+							})
+						}
+
+						indice = seriesname.findIndex(function(name){
+							return name.seriesname == this;
+						}, val.tipo);
+
+						if (indice == -1) {
+							seriesname.push({
+								seriesname: val.tipo
+							});
+						}
+
+						aux = val;
+					});
+
+					$.each(seriesname, function(index1, name) {
+						values = [];
+						
+						$.each(categorias, function(index2, categorias) {
+							ok = false;
+							 $.each(data, function(index3, val) {
+							 	if (val.tipo == name.seriesname && meses[val.month] == categorias.label) {
+							 		values.push({
+							 			value: val.cantidad
+							 		});
+							 		ok = true;
+							 		return false;
+							 	}
+							 });
+
+							if (!ok) {
+								values.push({
+									value: ""
+								});
+							}
+						});
+						
+						datos.push({
+							seriesname: name.seriesname,
+							data: values
+						});
+
+					});
+					
+					$("#chartStacked-container").insertFusionCharts({
+					    type: "stackedcolumn2d",
+					    width: widthChart,
+					    height: "350",
+					    dataFormat: "json",
+					    dataSource: {
+					        chart: {
+					        	caption: "Evolución del Año " + year,
+					        	subCaption: " ",
+					            numberPrefix: "€",
+					            showBorder: 0,
+					            showCanvasBorder: 0,
+					            bgColor: "#ffffff",
+					            divLineDashed: 1,
+					            showSum: 1,
+					            theme: "fint",
+					            legendBorderAlpha: 0,
+					            legendShadow: 0,
+					            plotBorderAlpha: 10,
+					            showHoverEffect: 1
+					        },
+					        categories: [{
+					        	category: categorias
+					        }],
+					        dataset: datos
+				    	}
+					});
+
+					break;
+			}
+
 		});
 	}
 
@@ -307,6 +397,5 @@ $(function () {
 		var year = $(this).val();
 		getChart(year);
 	});
-
 
 });

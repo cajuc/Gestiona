@@ -27,6 +27,7 @@ Route::get('gastos', 'ControllerMain@gastos');
 Route::delete('gastos/{id}', 'ControllerMain@borrarGasto');
 Route::put('gastos/{id}/edit', 'ControllerMain@editarGasto');
 Route::post('gastos/crear', 'ControllerMain@crearGasto');
+Route::get('gastosChart/{year}', 'ControllerMain@obtenerGastos');
 
 Route::post('registro', 'Acceso\ControllerAcceso@registro');
 /*
