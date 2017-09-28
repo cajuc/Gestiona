@@ -350,4 +350,13 @@ class ControllerMain extends Controller
 
 		return response()->json($gastos);
 	}
+
+	/*
+		Se obtiene los gastos agrupados por el año y el tipo
+	 */
+	public function obtenerGastosTipo($year, $tipo = 'fijo'){
+		$gastos = Recursos::obtenerGastosTipo($year, $tipo);
+
+		return response()->json($gastos);
+	}
 }

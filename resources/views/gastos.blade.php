@@ -5,15 +5,15 @@
 	<div class="col-lg-8">
 		<h2 class="title-block">Historial de Gastos</h2>
 		@if (Session::get('message'))
-			@if (Session::get('class'))
-			<div class="alert text-center {{ Session::get('class') }}" role="alert">
-				{{ Session::get('message') }}
-			</div>
-			@else
-			<div class="alert alert-success text-center" role="alert">
-				{{ Session::get('message') }}
-			</div>
-			@endif
+		@if (Session::get('class'))
+		<div class="alert text-center {{ Session::get('class') }}" role="alert">
+			{{ Session::get('message') }}
+		</div>
+		@else
+		<div class="alert alert-success text-center" role="alert">
+			{{ Session::get('message') }}
+		</div>
+		@endif
 		@endif
 		@if ($errors->any())
 		<div class="alert alert-danger">
@@ -50,12 +50,12 @@
 									<form action="{{ url('gastos') }}/{{ $gasto->id }}" method="post">
 										{{ method_field('DELETE') }}
 										{{ csrf_field() }}
-										<button type="submit" class="btn btn-default btn-sm .borrar" title="Borrar">
-										<span style="color: red" class="glyphicon glyphicon-trash"></span>
+										<button type="submit" class="btn btn-default btn-sm" title="Borrar">
+											<span style="color: red" class="glyphicon glyphicon-trash"></span>
 										</button>
 									</form>
 									<button class="btn btn-default btn-sm editForm" type="button" title="Editar" value="{{ $gasto->id }}">
-									<span style="color: blue" class="glyphicon glyphicon-edit"></span>
+										<span style="color: blue" class="glyphicon glyphicon-edit"></span>
 									</button>
 								</div>
 							</div>
@@ -94,12 +94,12 @@
 							<td>
 								<div class="btn-toolbar" role="toolbar">
 									<div class="btn-group">
-										<button class="btn btn-default btn-sm .editar" type="submit" title="Editar">
-										<span style="color: blue" class="glyphicon glyphicon-edit"></span>
+										<button class="btn btn-default btn-sm" type="submit" title="Editar">
+											<span style="color: blue" class="glyphicon glyphicon-edit"></span>
 										</button>
 										<span></span>
 										<button id="cerrarForm" class="btn btn-default btn-sm" type="button" title="Cerrar">
-										<span style="color: red" class="glyphicon glyphicon-remove"></span>
+											<span style="color: red" class="glyphicon glyphicon-remove"></span>
 										</button>
 									</div>
 								</div>
@@ -112,38 +112,7 @@
 				{{ $gastos->links() }}
 			</nav>
 		</div>
-	</div>
-	<div class="col-lg-4">
-		<h2 class="title-block">Evolución de Gastos</h2>
-		<br>
-		<div class="row">
-			<div id="chartStacked-container" class="col-lg-12 col-xs-12"></div>
-		</div>
-		<hr>
-		<div class="row">
-			<div class="col-lg-12 col-xs-12" id="chartBar-container"></div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col-lg-8">
-				<form class="form-inline">
-					<div class="form-group">
-						<label for="">Mostrar evolución de</label>
-						<select class="form-control" name="year" id="year">
-							@forelse ($years as $year)
-							<option value="{{ $year->year }}">{{ $year->year }}</option>
-							@empty
-							<p class="alert alert-info">No se puede seleccionar el año</p>
-							@endforelse
-						</select>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-lg-8">
+		
 		<h2 class="title-block">Crear nuevo gasto</h2>
 		<br>
 		<div class="row">
@@ -154,7 +123,7 @@
 						<div class="input-group">
 							<div class="input-group-btn">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Elegir tipo">
-								<span class="caret"></span>
+									<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
 									@foreach ($tipos as $tipo)
@@ -172,7 +141,7 @@
 						<div class="input-group">
 							<div class="input-group-btn">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Elegir concepto">
-								<span class="caret"></span>
+									<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" id="dropdownConcepto"></ul>
 							</div>
@@ -202,5 +171,51 @@
 			</form>
 		</div>
 	</div>
+
+	<div class="col-lg-4">
+		<h2 class="title-block">Evolución de Gastos</h2>
+		<div class="row">
+			<div class="col-lg-8">
+				<form class="form-inline">
+					<div class="form-group">
+						<label for="">Mostrar evolución de</label>
+						<select class="form-control" name="year" id="year">
+							@forelse ($years as $year)
+							<option value="{{ $year->year }}">{{ $year->year }}</option>
+							@empty
+							<p class="alert alert-info">No se puede seleccionar el año</p>
+							@endforelse
+						</select>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div id="chartStacked-container" class="col-lg-12 col-xs-12"></div>
+		</div>
+		<hr>
+		<h2 class="title-block">Detalle de Gastos</h2>
+		<br>
+		<div class="row">
+			<div class="col-lg-12 col-xs-12" id="chartDoughnut-container"></div>
+		</div>
+		<div class="row">
+			<div class="col-lg-8">
+				<form class="form-inline">
+					<div class="form-group">
+						<label for="">Seleccionar tipo</label>
+						<select class="form-control" id="chartTipo">
+							@forelse ($tipos as $tipo)
+							<option value="{{ $tipo->tipo }}">{{ $tipo->tipo }}</option>
+							@empty
+							<p class="alert alert-info">No existen tipos</p>
+							@endforelse
+						</select>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
+
 @endsection

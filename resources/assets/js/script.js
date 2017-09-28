@@ -3,13 +3,13 @@ $(function () {
 	var patternEmail 	= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/;	//Expresión regular para validar email
 	var patternPw		= /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;	//Expresión regular para validar password
 	var ok,
-		newOk,
-		newOkRePassword,
-	 	okNombre,
-		okApellidos,
-		okEmail,
-		okPassword,
-		okRePassword	= false;
+	newOk,
+	newOkRePassword,
+	okNombre,
+	okApellidos,
+	okEmail,
+	okPassword,
+	okRePassword	= false;
 	var validado		= false;	//Indica que el formulario está validado
 	var url = window.location;		// Se obtiene la url actual de la pagina
 
@@ -104,7 +104,7 @@ $(function () {
 
 	/*
 		Valida las nuevas contraseñas introducidas
-	*/
+		*/
 
 	// Se valida el campo password
 	$("input[name='newPassword']").keyup(function(){
@@ -152,19 +152,19 @@ $(function () {
 
 	/*
 		Muestra el formulario para editar el ingreso/gasto seleccionado
-	*/
-	$(".editForm").click(function(event) {
-		var id = $(this).val();
-		var url = window.location.pathname.substring(1, window.location.pathname.length) + "/";
+		*/
+		$(".editForm").click(function(event) {
+			var id = $(this).val();
+			var url = window.location.pathname.substring(1, window.location.pathname.length) + "/";
 
-		if (url === 'gastos/') {
-			$("#formTipo").val($("#tipo-"+id).text());
-		}
+			if (url === 'gastos/') {
+				$("#formTipo").val($("#tipo-"+id).text());
+			}
 
-		$("#formConcepto").val($("#concepto-"+id).text());
-		$("#formFecha").val($("#fecha-"+id).text());
-		$("#formCantidad").val($("#cantidad-"+id+" span").text());
-		$("#formComentario").val($("#comentario-"+id).text());
+			$("#formConcepto").val($("#concepto-"+id).text());
+			$("#formFecha").val($("#fecha-"+id).text());
+			$("#formCantidad").val($("#cantidad-"+id+" span").text());
+			$("#formComentario").val($("#comentario-"+id).text());
 
 		// Asignar el valor a la propiedad 'action' del formulario con el id del ingreso seleccionado
 		// $(".formEdit form").attr('action', );("/id/" + id + "/edit");
@@ -176,43 +176,43 @@ $(function () {
 
 	/*
 		Oculta el formulario de edición de ingresos/gastos
-	*/
-	$("#cerrarForm").click(function(event) {
-		$(".formEdit").fadeOut('slow');
-	});
+		*/
+		$("#cerrarForm").click(function(event) {
+			$(".formEdit").fadeOut('slow');
+		});
 
 	/////////////////////////////////////////////////
 
 	/*
 		Se asigna widget 'DATEPICKER' al campo fecha del formulario
-	*/
-	$(".datepicker").datepicker({
-		dateFormat: "yy-mm-dd"
-	});
+		*/
+		$(".datepicker").datepicker({
+			dateFormat: "yy-mm-dd"
+		});
 
 	/////////////////////////////////////////////////
 
 	/*
 		Se obtiene los conceptos de ingresos/gastos del usuario
-	*/
-	$("#dropdownConcepto").hide();
+		*/
+		$("#dropdownConcepto").hide();
 
-	$(".dropdown-menu, .dropdown-menu .concepto").on('click', '.concepto', function(event) {
-		event.preventDefault();
-		
-		$("#concepto").val($(this).text());
-		$("#dropdown-menu").toggle();
-	});
+		$(".dropdown-menu, .dropdown-menu .concepto").on('click', '.concepto', function(event) {
+			event.preventDefault();
+
+			$("#concepto").val($(this).text());
+			$("#dropdown-menu").toggle();
+		});
 
 	/*
 		Se obtiene los tipos de gasto del usuario
-	*/
+		*/
 
-	$(".dropdown-menu .tipo").click(function(event) {
-		event.preventDefault();
-		var tipo = $(this).text();
+		$(".dropdown-menu .tipo").click(function(event) {
+			event.preventDefault();
+			var tipo = $(this).text();
 
-		$("#tipo, #tipoConcepto").val($(this).text());
+			$("#tipo, #tipoConcepto").val($(this).text());
 
 		// Se carga los conceptos en base al tipo de concepto seleccionado
 		$.getJSON('obtenerConceptos/gastos/tipo/'+tipo, function(data) {
@@ -236,39 +236,41 @@ $(function () {
 	/*
 		Se le añade al campo 'concepto' del formulario de ingreso la funcionalidad para obtener una
 		lista de valores que el usario ha introducido anteriormente como concepto
-	*/
-	var conceptos = [];
-	var uri = url.pathname.substring(1, url.pathname.length);
+		*/
+		var conceptos = [];
+		var uri = url.pathname.substring(1, url.pathname.length);
 
-	if (uri !== 'gastos') {
-		$.getJSON('obtenerConceptos/'+uri, function(data) {
-			$.each(data, function(index, val) {
-				conceptos.push(val['concepto']);
-			});
+		if (uri !== 'gastos') {
+			$.getJSON('obtenerConceptos/'+uri, function(data) {
+				$.each(data, function(index, val) {
+					conceptos.push(val['concepto']);
+				});
 
-			$("#concepto, #formConcepto").autocomplete({
-				source: conceptos
+				$("#concepto, #formConcepto").autocomplete({
+					source: conceptos
+				});
 			});
-		});
-	}
+		}
 
 	/////////////////////////////////////////////////
 
 	/*
 		Se genera el charts mostrando la evolución de los ingresos
-	*/
+		*/
 	// Función que devuelve el Chart que muestra la evolución de los ingresos en el año indicado
-	var widthChart = $("#chart-container").width();	// Ancho del contenedor CHART
 	var defaultYear = $("#year").val();
+	var defaultTipo = $("#chartTipo").val();
 
 	function getChart(year = defaultYear){
 		$.getJSON(uri+'Chart/'+year, function(data) {
 			var datos = [];
 			var values = [];
-			var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+			var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
 			switch(uri){
 				case 'ingresos':
+					var widthChart = $("#chartColumn-container").width();	// Ancho del contenedor CHART
+
 					$.each(data, function(index, val){
 						// Se añade un nuevo objeto al array datos
 						datos.push({
@@ -278,38 +280,40 @@ $(function () {
 					});
 
 					$("#chartColumn-container").insertFusionCharts({
-					    type: "column2d",
-					    width: widthChart,
-					    height: "350",
-					    dataFormat: "json",
-					    dataSource: {
-					        chart: {
-					        	caption: "Evolución del Año " + year,
-					        	subCaption: " ",
-					            numberPrefix: "€",
-					            showBorder: 0,
-					            showCanvasBorder: 0,
-					            divLineDashed: 1,
-					            bgColor:"#ffffff",
-					            theme: "fint",
-					            plotBorderAlpha: 10,
-					        },
-					        data: datos
-				    	}
+						type: "column2d",
+						width: widthChart,
+						height: "350",
+						dataFormat: "json",
+						dataSource: {
+							chart: {
+								caption: "Evolución del Año " + year,
+								subCaption: " ",
+								numberPrefix: "€",
+								showBorder: 0,
+								showCanvasBorder: 0,
+								divLineDashed: 1,
+								bgColor:"#ffffff",
+								theme: "fint",
+								plotBorderAlpha: 10,
+							},
+							data: datos
+						}
 					});
 
 					break;
-				case 'gastos':
+					case 'gastos':
+					var widthChart = $("#chartStacked-container").width();	// Ancho del contenedor CHART
+					var tipo       = $("#chartTipo").val();
 					var categorias = [];
-					var aux = {};
+					var aux        = {};
 					var seriesname = [];
-					var ok = true;
+					var ok         = true;
 
 					$.each(data, function(index, val) {
 						if (aux.month != val.month) {
 							// Se añade una nueva categoria
 							categorias.push({
-								label: meses[val.month]
+								label: meses[val.month-1]
 							})
 						}
 
@@ -331,15 +335,15 @@ $(function () {
 						
 						$.each(categorias, function(index2, categorias) {
 							ok = false;
-							 $.each(data, function(index3, val) {
-							 	if (val.tipo == name.seriesname && meses[val.month] == categorias.label) {
-							 		values.push({
-							 			value: val.cantidad
-							 		});
-							 		ok = true;
-							 		return false;
-							 	}
-							 });
+							$.each(data, function(index3, val) {
+								if (val.tipo == name.seriesname && meses[val.month-1] == categorias.label) {
+									values.push({
+										value: val.cantidad
+									});
+									ok = true;
+									return false;
+								}
+							});
 
 							if (!ok) {
 								values.push({
@@ -356,46 +360,114 @@ $(function () {
 					});
 					
 					$("#chartStacked-container").insertFusionCharts({
-					    type: "stackedcolumn2d",
-					    width: widthChart,
-					    height: "350",
-					    dataFormat: "json",
-					    dataSource: {
-					        chart: {
-					        	caption: "Evolución del Año " + year,
-					        	subCaption: " ",
-					            numberPrefix: "€",
-					            showBorder: 0,
-					            showCanvasBorder: 0,
-					            bgColor: "#ffffff",
-					            divLineDashed: 1,
-					            showSum: 1,
-					            theme: "fint",
-					            legendBorderAlpha: 0,
-					            legendShadow: 0,
-					            plotBorderAlpha: 10,
-					            showHoverEffect: 1
-					        },
-					        categories: [{
-					        	category: categorias
-					        }],
-					        dataset: datos
-				    	}
+						type: "stackedcolumn2d",
+						width: widthChart,
+						height: "350",
+						dataFormat: "json",
+						dataSource: {
+							chart: {
+								caption: "Evolución del Año " + year,
+								subCaption: " ",
+								numberPrefix: "€",
+								showBorder: 0,
+								showCanvasBorder: 0,
+								bgColor: "#ffffff",
+								divLineDashed: 1,
+								showSum: 1,
+								theme: "fint",
+								legendBorderAlpha: 0,
+								legendShadow: 0,
+								plotBorderAlpha: 10,
+								showHoverEffect: 1
+							},
+							categories: [{
+								category: categorias
+							}],
+							dataset: datos
+						}
 					});
 
 					break;
-			}
+					default:
+					break;
+				}
 
+			});
+	}
+
+	function getChartDoughnut(year = defaultYear, tipo = defaultTipo){
+		console.log(tipo);
+		// Se obtienen los datos para mostrar el Chart Doughnut con los detalles de los gastos
+		$.getJSON(uri+'ChartDoughnut/'+year+'/tipo/'+tipo, function(data) {
+			var datos = [];
+			var total = 0;
+			var width = $("#chartDoughnut-container").width();
+
+			$.each(data, function(index, val) {
+				datos.push({
+					label: val.concepto,
+					value: val.cantidad
+				});
+
+				// Se acumula el total de los gastos
+				total += val.cantidad;
+			});
+			console.log(datos);
+
+			$("#chartDoughnut-container").insertFusionCharts({
+				type: "doughnut2d",
+				width: width,	// Se divide el valor obtenido del contenedor
+				height: "350",
+				dataFormat: "json",
+				dataSource: {
+					chart: {
+						caption: "Gastos " + tipo + " de " + year,
+						numberPrefix: "€",
+						showBorder: 0,
+						showCanvasBorder: 0,
+						use3DLighting: 0,
+						bgColor: "#ffffff",
+						enableSmartLabels: 0,
+						startingAngle: 90,
+						showLabels: 0,
+						showPercentValues: 1,
+						showLegend: 1,
+						defaultCenterLabel: "Total " + total + "€",
+						centerLabel: "$label" + ": " + "$value",
+						centerLabelBold: 1,
+						showTooltip: 0,
+						plotBorderAlpha: 10,
+						decimals: 0,
+						useDataPlotColorForLabels: 1,
+						legendBorderAlpha: 0,
+						legendShadow: 0,
+						theme: "fint"
+					},
+					data: datos
+				}
+			});
 		});
 	}
 
 	// Se muestra el Chart de evolución de ingresos cuando se carga el apartado Ingresos
 	getChart();
+	getChartDoughnut();
 
 	// Cuando se elija otro año se recargará con los datos correspondientes al año elegido
 	$("#year").change(function(event) {
 		var year = $(this).val();
+		var tipo = $("chartTipo").val();
+
 		getChart(year);
+		getChartDoughnut(year, tipo);
+	});
+
+	// Cuando se elija otro 'tipo' se recargará el chart doughnut con los datos correspondientes al tipo elegido
+	$("#chartTipo").change(function(event){
+		var year = $("#year").val();
+		var tipo = $("#chartTipo").val();
+
+		getChartDoughnut(year, tipo);
 	});
 
 });

@@ -28,6 +28,7 @@ Route::delete('gastos/{id}', 'ControllerMain@borrarGasto');
 Route::put('gastos/{id}/edit', 'ControllerMain@editarGasto');
 Route::post('gastos/crear', 'ControllerMain@crearGasto');
 Route::get('gastosChart/{year}', 'ControllerMain@obtenerGastos');
+Route::get('gastosChartDoughnut/{year}/tipo/{tipo}', 'ControllerMain@obtenerGastosTipo');
 
 Route::post('registro', 'Acceso\ControllerAcceso@registro');
 /*
