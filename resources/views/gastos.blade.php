@@ -6,11 +6,7 @@
 		<h2 class="title-block">Historial de Gastos</h2>
 		@if (Session::get('message'))
 		@if (Session::get('class'))
-		<div class="alert text-center {{ Session::get('class') }}" role="alert">
-			{{ Session::get('message') }}
-		</div>
-		@else
-		<div class="alert alert-success text-center" role="alert">
+		<div class="alert text-center {{ Session::get('class') ? Session::get('class') : 'alert-success' }}" role="alert">
 			{{ Session::get('message') }}
 		</div>
 		@endif
@@ -112,7 +108,7 @@
 				{{ $gastos->links() }}
 			</nav>
 		</div>
-		
+
 		<h2 class="title-block">Crear nuevo gasto</h2>
 		<br>
 		<div class="row">
@@ -178,7 +174,7 @@
 			<div class="col-lg-8">
 				<form class="form-inline">
 					<div class="form-group">
-						<label for="">Mostrar evolución de</label>
+						<label>Gastos de </label>
 						<select class="form-control" name="year" id="year">
 							@forelse ($years as $year)
 							<option value="{{ $year->year }}">{{ $year->year }}</option>
@@ -194,7 +190,7 @@
 			<div id="chartStacked-container" class="col-lg-12 col-xs-12"></div>
 		</div>
 		<hr>
-		<h2 class="title-block">Detalle de Gastos</h2>
+		<h2 class="title-block">Detalles de Gastos</h2>
 		<br>
 		<div class="row">
 			<div class="col-lg-12 col-xs-12" id="chartDoughnut-container"></div>

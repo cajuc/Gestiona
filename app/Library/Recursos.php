@@ -44,6 +44,7 @@ class Recursos
     		->select(DB::raw("SUM(cantidad) as cantidad, MONTH(fecha) as month, YEAR(fecha) as year"))
     		->where(DB::raw("YEAR(fecha)"), $year)
     		->groupBy(DB::raw("MONTH(fecha), YEAR(fecha)"))
+            ->orderBy(DB::raw("MONTH(fecha)"), 'asc')
     		->get();
 
     	return $ingresos;
@@ -132,5 +133,102 @@ class Recursos
             ->get();
 
         return $gastos;
+    }
+
+    public static function yearsAhorros()
+    {
+        $user = Auth::user();                 
+
+        $years = DB::table('users')
+                    ->join('ingresos', 'users.id', '=', 'ingresos.user_id')
+                    ->join('gastos', 'users.id', '=', 'gastos.user_id')
+                    ->select(DB::raw("YEAR(ingresos.fecha) as year"))
+                    ->distinct(DB::raw("YEAR(ingresos.fecha)"))
+                    ->whereColumn(DB::raw("YEAR(ingresos.fecha)"), DB::raw("YEAR(gastos.fecha)"))
+                    ->orderBy(DB::raw("YEAR(ingresos.fecha)"), 'desc')
+                    ->get();
+
+        return $years;
+    }
+
+    public static function obtenerAhorros($year)
+    {
+        $user    = Auth::user();
+        $ahorros = [];
+        $dif     = 0;
+        
+        // Se obtienen los ingresos(cantidad, mes) del año $year agrupados en meses
+        $ingresos = $user->ingresos()
+            ->select(DB::raw("SUM(cantidad) as cantidad, MONTH(fecha) as month"))
+            ->where(DB::raw("YEAR(fecha)"), $year)
+            ->groupBy(DB::raw("MONTH(fecha)"))
+            ->orderBy(DB::raw("MONTH(fecha)"), 'asc')
+            ->get();
+        
+        // Se obtienen los gastos(cantidad, mes) del año $year agrupados en meses 
+        $gastos   = $user->gastos()
+            ->select(DB::raw("SUM(cantidad) as cantidad, MONTH(fecha) as month"))
+            ->where(DB::raw("YEAR(fecha)"), $year)
+            ->groupBy(DB::raw("MONTH(fecha)"))
+            ->orderBy(DB::raw("MONTH(fecha)"), 'asc')
+            ->get();
+
+        // Se obtiene la diferencia de la cantidad de los ingresos y gastos que coincidan cada mes
+        // y se añade al array $ahorros
+        foreach ($ingresos as $key => $ingreso) {
+            $dif = 0;
+            $ok  = false;
+
+            foreach ($gastos as $key => $gasto) {
+                if ($gasto->month == $ingreso->month) {
+                    $dif = $ingreso->cantidad - $gasto->cantidad;
+
+                    array_push($ahorros, [
+                        'month'    => $ingreso->month,
+                        'cantidad' => $dif
+                    ]);
+
+                    $ok = true;
+                    break;
+                }
+            }
+
+            // Se añade un nuevo item a $ahorros con la cantidad y mes actual del ingreso actual
+            // el cual no coincide con ningún mes de los gastos obtenidos
+            if (!$ok) {
+                array_push($ahorros, [
+                    'month' => $ingreso->month,
+                    'cantidad' => $ingreso->cantidad
+                ]);
+            }
+        }
+
+        foreach ($gastos as $key => $gasto) {
+            $ok= false;
+
+            foreach ($ingresos as $key => $ingreso) {
+                if ($ingreso->month == $gasto->month) {
+                    $ok = true;
+                    break;
+                }    
+            }
+
+            // Se añade un nuevo item a $ahorros con la cantidad y mes actual del gsato actual
+            // el cual no coincide con ningún mes de los ingresos obtenidos
+            if (!$ok) {
+                array_push($ahorros, [
+                    'month' => $gasto->month,
+                    'cantidad' => -$gasto->cantidad
+                ]);
+            }
+        }
+
+        // Se ordena el array por el mes de forma ascendente
+        $ahorros = array_values(array_sort($ahorros, function($value){
+            return $value['month'];
+        }));
+
+
+        return $ahorros;
     }
 }

@@ -316,10 +316,10 @@ $(function () {
 	var conceptos = [];
 	var uri = url.pathname.substring(1, url.pathname.length);
 
-	if (uri !== 'gastos') {
+	if (uri !== 'gastos' && uri !== 'ahorros') {
 		$.getJSON('obtenerConceptos/' + uri, function (data) {
 			$.each(data, function (index, val) {
-				conceptos.push(val['concepto']);
+				conceptos.push(val.concepto);
 			});
 
 			$("#concepto, #formConcepto").autocomplete({
@@ -344,7 +344,7 @@ $(function () {
 			var datos = [];
 			var values = [];
 			var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
+			console.log(data);
 			switch (uri) {
 				case 'ingresos':
 					var widthChart = $("#chartColumn-container").width(); // Ancho del contenedor CHART
@@ -352,7 +352,7 @@ $(function () {
 					$.each(data, function (index, val) {
 						// Se añade un nuevo objeto al array datos
 						datos.push({
-							label: meses[val.month],
+							label: meses[val.month - 1],
 							value: val.cantidad
 						});
 					});
@@ -465,6 +465,39 @@ $(function () {
 					});
 
 					break;
+				case 'ahorros':
+					var width = $("#chartAhorros-container").width(); // Ancho del contenedor CHART
+
+					$.each(data, function (index, val) {
+						// Se añade un nuevo objeto al array datos
+						datos.push({
+							label: meses[val.month - 1],
+							value: val.cantidad
+						});
+					});
+
+					$("#chartAhorros-container").insertFusionCharts({
+						type: "column2d",
+						width: width,
+						height: "350",
+						dataFormat: "json",
+						dataSource: {
+							chart: {
+								caption: "Evolución del Año " + year,
+								subCaption: " ",
+								numberPrefix: "€",
+								showBorder: 0,
+								showCanvasBorder: 0,
+								divLineDashed: 1,
+								bgColor: "#ffffff",
+								theme: "fint",
+								plotBorderAlpha: 10
+							},
+							data: datos
+						}
+					});
+
+					break;
 				default:
 					break;
 			}
@@ -475,57 +508,58 @@ $(function () {
 		var year = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultYear;
 		var tipo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultTipo;
 
-		console.log(tipo);
-		// Se obtienen los datos para mostrar el Chart Doughnut con los detalles de los gastos
-		$.getJSON(uri + 'ChartDoughnut/' + year + '/tipo/' + tipo, function (data) {
-			var datos = [];
-			var total = 0;
-			var width = $("#chartDoughnut-container").width();
+		if (uri == 'gastos') {
+			// Se obtienen los datos para mostrar el Chart Doughnut con los detalles de los gastos
+			$.getJSON(uri + 'ChartDoughnut/' + year + '/tipo/' + tipo, function (data) {
+				var datos = [];
+				var total = 0;
+				var width = $("#chartDoughnut-container").width();
 
-			$.each(data, function (index, val) {
-				datos.push({
-					label: val.concepto,
-					value: val.cantidad
+				$.each(data, function (index, val) {
+					datos.push({
+						label: val.concepto,
+						value: val.cantidad
+					});
+
+					// Se acumula el total de los gastos
+					total += val.cantidad;
 				});
 
-				// Se acumula el total de los gastos
-				total += val.cantidad;
+				$("#chartDoughnut-container").insertFusionCharts({
+					type: "doughnut2d",
+					width: width, // Se divide el valor obtenido del contenedor
+					height: "350",
+					dataFormat: "json",
+					dataSource: {
+						chart: {
+							caption: "Gastos " + tipo + " de " + year,
+							numberPrefix: "€",
+							showBorder: 0,
+							showCanvasBorder: 0,
+							use3DLighting: 0,
+							bgColor: "#ffffff",
+							enableSmartLabels: 0,
+							startingAngle: 90,
+							showShadow: 0,
+							showLabels: 0,
+							showPercentValues: 1,
+							showLegend: 1,
+							defaultCenterLabel: "Total " + total + "€",
+							centerLabel: "$label" + ": " + "$value",
+							centerLabelBold: 1,
+							showTooltip: 0,
+							plotBorderAlpha: 10,
+							decimals: 0,
+							useDataPlotColorForLabels: 1,
+							legendBorderAlpha: 0,
+							legendShadow: 0,
+							theme: "fint"
+						},
+						data: datos
+					}
+				});
 			});
-			console.log(datos);
-
-			$("#chartDoughnut-container").insertFusionCharts({
-				type: "doughnut2d",
-				width: width, // Se divide el valor obtenido del contenedor
-				height: "350",
-				dataFormat: "json",
-				dataSource: {
-					chart: {
-						caption: "Gastos " + tipo + " de " + year,
-						numberPrefix: "€",
-						showBorder: 0,
-						showCanvasBorder: 0,
-						use3DLighting: 0,
-						bgColor: "#ffffff",
-						enableSmartLabels: 0,
-						startingAngle: 90,
-						showLabels: 0,
-						showPercentValues: 1,
-						showLegend: 1,
-						defaultCenterLabel: "Total " + total + "€",
-						centerLabel: "$label" + ": " + "$value",
-						centerLabelBold: 1,
-						showTooltip: 0,
-						plotBorderAlpha: 10,
-						decimals: 0,
-						useDataPlotColorForLabels: 1,
-						legendBorderAlpha: 0,
-						legendShadow: 0,
-						theme: "fint"
-					},
-					data: datos
-				}
-			});
-		});
+		}
 	}
 
 	// Se muestra el Chart de evolución de ingresos cuando se carga el apartado Ingresos

@@ -117,7 +117,7 @@
 			<div class="col-lg-8">
 				<form class="form-inline">
 					<div class="form-group">
-						<label for="">Mostrar evolución de</label>
+						<label>Mostrar evolución de</label>
 						<select class="form-control" name="year" id="year">
 							@forelse ($years as $year)
 							<option value="{{ $year->year }}">{{ $year->year }}</option>

@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
 	return view('acceso');
-})->name('acceso');
+})->middleware('guest')->name('acceso');
 
 Route::get('inicio', 'ControllerMain@inicio')->name('inicio');
 Route::get('ingresos', 'ControllerMain@ingresos');
@@ -29,6 +29,8 @@ Route::put('gastos/{id}/edit', 'ControllerMain@editarGasto');
 Route::post('gastos/crear', 'ControllerMain@crearGasto');
 Route::get('gastosChart/{year}', 'ControllerMain@obtenerGastos');
 Route::get('gastosChartDoughnut/{year}/tipo/{tipo}', 'ControllerMain@obtenerGastosTipo');
+Route::get('ahorros', 'AhorrosController@index');
+Route::get('ahorrosChart/{year}', 'AhorrosController@obtenerAhorros');
 
 Route::post('registro', 'Acceso\ControllerAcceso@registro');
 /*
