@@ -34,7 +34,7 @@
 						<form action="login" method="post">
 							{{ csrf_field() }}
 							<div class="form-group">
-								<input type="email" name="inicioEmail" class="form-control" placeholder="Email">
+								<input type="email" name="inicioEmail" class="form-control" placeholder="Email" value="{{ old('inicioEmail') }}">
 							</div>
 							<div class="form-group">
 								<input type="password" name="inicioPassword" class="form-control" placeholder="Password">

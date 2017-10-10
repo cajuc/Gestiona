@@ -216,7 +216,7 @@ $(function () {
 	});
 
 	// Se comprueba que todos los campos estén validados
-	$("input[name='reset']").click(function (event) {
+	$("input[name='reset'], #guardar").click(function (event) {
 		if (!newOkPassword || !newOkRePassword) {
 			event.preventDefault();
 
@@ -316,7 +316,7 @@ $(function () {
 	var conceptos = [];
 	var uri = url.pathname.substring(1, url.pathname.length);
 
-	if (uri !== 'gastos' && uri !== 'ahorros') {
+	if (uri == 'ingresos') {
 		$.getJSON('obtenerConceptos/' + uri, function (data) {
 			$.each(data, function (index, val) {
 				conceptos.push(val.concepto);
@@ -581,6 +581,33 @@ $(function () {
 		var tipo = $("#chartTipo").val();
 
 		getChartDoughnut(year, tipo);
+	});
+
+	/////////////////////////////////////////////////
+
+	/*
+ 	Se comprueba los campos contraseña para que el usuario introduzca un valor válido
+  */
+
+	$("#password").keyup(function () {
+		var password = $(this).val();
+
+		if (!patternPw.test(password) && password.length > 0) {
+			$("#messagePassword").show();
+		} else {
+			$("#messagePassword").hide();
+		}
+	});
+
+	$("#rePassword").keyup(function () {
+		var password = $(this).val();
+		var borderColor = $(this).css('border-color');
+
+		if (password !== $("#password").val() && password.length > 0) {
+			$(this).css('border-color', 'red');
+		} else {
+			$(this).css('border-color', borderColor);
+		}
 	});
 });
 

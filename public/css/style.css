@@ -4,6 +4,8 @@ body {
 
 .title {
   font-size: 50px;
+  font-family: Raleway, "Times New Roman", serif;
+  font-weight: bold;
 }
 
 .logout {
@@ -11,14 +13,32 @@ body {
 }
 
 .brand-image {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   margin-left: -15px;
+}
+
+.perfil {
+  margin-top: 10px;
+}
+
+.perfil img {
+  width: 35px;
+  height: 35px;
+}
+
+.perfil button:hover {
+  color: red !important;
 }
 
 .menu-nav {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.menu-nav li a {
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .title-block {
@@ -48,5 +68,41 @@ textarea {
 
 .paginacion {
   margin-top: -22px;
+}
+
+@media (min-width: 768px) {
+  .description {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .description {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  .father {
+    position: relative;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .child-left {
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    -webkit-transform: translate(100%, -50%);
+            transform: translate(100%, -50%);
+  }
+
+  .child-right {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    -webkit-transform: translate(-100%, -50%);
+            transform: translate(-100%, -50%);
+  }
 }
 

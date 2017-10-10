@@ -20,14 +20,15 @@ class ControllerAcceso extends Controller
     	if (Auth::attempt([
     			'email' => $request->input('inicioEmail'), 
     			'password' => $request->input('inicioPassword'), 
-    			'active' => 1])) {
+    			'active' => 1
+        ])) {
 
     		return redirect()->action('ControllerMain@inicio');
     	}else{
     		return redirect('/')->with([
     			'message' => 'El email/contraseña no son correctos o su cuenta aún no ha sido activada',
     			'class' => 'alert-danger'
-    		]);
+    		])->withInput();
     	}
     }
 
