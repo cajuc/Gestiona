@@ -339,7 +339,7 @@ class ControllerMain extends Controller
 		$user->fondos = $user->fondos - $gasto->cantidad;
 		$user->save();
 
-		return redirect()->back()->with('message', 'Se ha creado un nuevo gasto.');
+		return back()->with('message', 'Se ha creado un nuevo gasto.');
 	}
 
 	/*

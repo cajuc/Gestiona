@@ -5,11 +5,9 @@
 	<div class="col-lg-8">
 		<h2 class="title-block">Historial de Gastos</h2>
 		@if (Session::get('message'))
-		@if (Session::get('class'))
 		<div class="alert text-center {{ Session::get('class') ? Session::get('class') : 'alert-success' }}" role="alert">
 			{{ Session::get('message') }}
 		</div>
-		@endif
 		@endif
 		@if ($errors->any())
 		<div class="alert alert-danger">
@@ -111,9 +109,9 @@
 			</nav>
 		</div>
 		@else
-			<div class="alert alert-info">
-				No hay registros de gastos todavia!!
-			</div>
+		<div class="alert alert-info">
+			No hay registros de gastos todavia!!
+		</div>
 		@endif
 
 		<h2 class="title-block">Crear nuevo gasto</h2>

@@ -150,6 +150,7 @@ class Recursos
                     ->join('gastos', 'users.id', '=', 'gastos.user_id')
                     ->select(DB::raw("YEAR(ingresos.fecha) as year"))
                     ->distinct(DB::raw("YEAR(ingresos.fecha)"))
+                    ->where('users.id', $user->id)
                     ->whereColumn(DB::raw("YEAR(ingresos.fecha)"), DB::raw("YEAR(gastos.fecha)"))
                     ->orderBy(DB::raw("YEAR(ingresos.fecha)"), 'desc')
                     ->get();
