@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('surnames');
             $table->string('email')->unique();
             $table->float('fondos')->default(0);
+            $table->string('image')->default('unknown.png');
             $table->string('password');
             $table->boolean('active')->default(false);
             $table->string('confirm_token', 100);

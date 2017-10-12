@@ -34,6 +34,7 @@ Route::get('ahorrosChart/{year}', 'AhorrosController@obtenerAhorros');
 Route::get('ajustes', 'AjustesController@index');
 Route::post('ajustes', 'AjustesController@store');
 Route::post('registro', 'Acceso\ControllerAcceso@registro');
+Route::post('ajustes/image', 'AjustesController@cambiarImage');
 /*
 	Route que maneja la petición cuando el usuario quiere salir de la Aplicación
 */

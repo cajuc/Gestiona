@@ -5,15 +5,15 @@
 	<div class="col-lg-7">
 		<h2 class="title-block">Historial de Ingresos</h2>
 		@if (Session::get('message'))
-			@if (Session::get('class'))
-			<div class="alert text-center {{ Session::get('class') }}" role="alert">
-				{{ Session::get('message') }}
-			</div>
-			@else
-			<div class="alert alert-success text-center" role="alert">
-				{{ Session::get('message') }}
-			</div>
-			@endif
+		@if (Session::get('class'))
+		<div class="alert text-center {{ Session::get('class') }}" role="alert">
+			{{ Session::get('message') }}
+		</div>
+		@else
+		<div class="alert alert-success text-center" role="alert">
+			{{ Session::get('message') }}
+		</div>
+		@endif
 		@endif
 		@if ($errors->any())
 		<div class="alert alert-danger">
@@ -24,6 +24,8 @@
 			</ul>
 		</div>
 		@endif
+
+		@if (count($ingresos))
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
@@ -49,11 +51,11 @@
 										{{ method_field('DELETE') }}
 										{{ csrf_field() }}
 										<button type="submit" class="btn btn-default btn-sm" title="Borrar">
-										<span style="color: red" class="glyphicon glyphicon-trash"></span>
+											<span style="color: red" class="glyphicon glyphicon-trash"></span>
 										</button>
 									</form>
 									<button class="btn btn-default btn-sm editForm" type="button" title="Editar" value="{{ $ingreso->id }}">
-									<span style="color: blue" class="glyphicon glyphicon-edit"></span>
+										<span style="color: blue" class="glyphicon glyphicon-edit"></span>
 									</button>
 								</div>
 							</div>
@@ -88,11 +90,11 @@
 								<div class="btn-toolbar" role="toolbar">
 									<div class="btn-group">
 										<button class="btn btn-default btn-sm" type="submit" title="Editar">
-										<span style="color: blue" class="glyphicon glyphicon-edit"></span>
+											<span style="color: blue" class="glyphicon glyphicon-edit"></span>
 										</button>
 										<span></span>
 										<button id="cerrarForm" class="btn btn-default btn-sm" type="button" title="Cerrar">
-										<span style="color: red" class="glyphicon glyphicon-remove"></span>
+											<span style="color: red" class="glyphicon glyphicon-remove"></span>
 										</button>
 									</div>
 								</div>
@@ -105,36 +107,13 @@
 				{{ $ingresos->links() }}
 			</nav>
 		</div>
-	</div>
-	<div class="col-lg-5">
-		<h2 class="title-block">Evolución de Ingresos</h2>
-		<br>
-		<div class="row">
-			<div id="chartColumn-container" class="col-lg-12 col-xs-12"></div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col-lg-8">
-				<form class="form-inline">
-					<div class="form-group">
-						<label>Mostrar evolución de</label>
-						<select class="form-control" name="year" id="year">
-							@forelse ($years as $year)
-							<option value="{{ $year->year }}">{{ $year->year }}</option>
-							@empty
-							<p class="alert alert-info">No se puede seleccionar el año</p>
-							@endforelse
-						</select>
-					</div>
-				</form>
+		@else
+			<div class="alert alert-info">
+				No hay registros de ingresos todavía!!
 			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-lg-7">
+		@endif
+
 		<h2 class="title-block">Crear nuevo ingreso</h2>
-		<br>
 		<div class="row">
 			<form action="{{ url('/') }}/ingresos/crear" method="post">
 				{{ csrf_field() }}
@@ -143,7 +122,7 @@
 						<div class="input-group">
 							<div class="input-group-btn">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Elegir concepto">
-								<span class="caret"></span>
+									<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
 									@foreach ($conceptos as $concepto)
@@ -177,5 +156,31 @@
 			</form>
 		</div>
 	</div>
+
+	<div class="col-lg-5">
+		<h2 class="title-block">Evolución de Ingresos</h2>
+		<br>
+		<div class="row">
+			<div id="chartColumn-container" class="col-lg-12 col-xs-12"></div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-lg-8">
+				<form class="form-inline">
+					<div class="form-group">
+						<label>Mostrar evolución de</label>
+						<select class="form-control" name="year" id="year">
+							@forelse ($years as $year)
+							<option value="{{ $year->year }}">{{ $year->year }}</option>
+							@empty
+							<p class="alert alert-info">No se puede seleccionar el año</p>
+							@endforelse
+						</select>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
+
 @endsection

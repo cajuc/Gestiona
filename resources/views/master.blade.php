@@ -13,11 +13,14 @@
 <body>
 	<div class="container">
 		<div class="row hidden-xs">
-			<div class="col-lg-6 pull-left">
+			<div class="col-lg-5 col-sm-5">
 				<h1 class="title"><a href="{{ url('inicio') }}" style="text-decoration: none;color: #636B6F">GESTIONA</a></h1>
 			</div>
-			<div class="col-lg-5">
-				<h2 class="text-right">Bienvenido <b>{{ $user->name }}</b></h2>
+			<div class="col-lg-2 col-sm-2 text-center">
+				<img src="images/{{ $user->image }}" alt="perfil" class="img-circle user-image">
+			</div>
+			<div class="col-lg-4 col-sm-5">
+				<h2 class="text-right">Bienvenid@ <b>{{ $user->name }}</b></h2>
 				<span class="pull-right"><b>{{ $user->fondos }}€</b> disponibles</span>
 			</div>
 
@@ -47,7 +50,7 @@
 					</div>
 					<div class="collapse navbar-collapse" id="navbar-collapse">
 						<div class="perfil visible-xs">
-							<img src="images/perfil.jpg" class="img-circle pull-left">
+							<img src="images/{{ $user->image }}" class="img-circle pull-left">
 
 							<div class="pull-right">
 								<form action="logout" method="post">

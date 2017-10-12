@@ -266,7 +266,7 @@ $(function () {
 			var datos  = [];
 			var values = [];
 			var meses  = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-			console.log(data);
+			
 			switch(uri){
 				case 'ingresos':
 					var widthChart = $("#chartColumn-container").width();	// Ancho del contenedor CHART

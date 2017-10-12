@@ -58,6 +58,37 @@ class AjustesController extends Controller
 		$user->fondos   = $request->fondos;
 		$user->save();
 
-		return back()->with('message', 'Los cambios se han realizado con exito!!.');
+		return back()->with('message', 'Los cambios se han realizado con exito!!');
+	}
+
+	public function cambiarImage(Request $request){
+		$this->validate($request, [
+			'image' => [
+				'required',
+				'image',  
+				'mimetypes:image/jpeg,image/png'
+			]
+		]);
+
+		$user = Auth::user();
+
+		
+		$extension = $request->image->extension();
+		$nombreImage = $user->email.'-perfil.'.$extension;
+
+		// Se almacena la imagen en el servidor
+		$path = $request->image->storeAs('images', $nombreImage);
+// dd($path);
+		if ($request->file('image')->isValid()) {
+
+			// Se actualiza el campo image del usuario con $nombreImage
+			$user->image = $nombreImage;
+			$user->save();
+
+
+			return back()->with('message', 'Se ha modificado la imagen de perfil con exito!!');
+		}
+
+		return back()->with('message', 'Se ha producido un error al actualizar la imagen de perfil');
 	}
 }

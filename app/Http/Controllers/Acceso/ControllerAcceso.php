@@ -75,7 +75,7 @@ class ControllerAcceso extends Controller
     		->where('confirm_token',$confirm_token)->first();
 
     	if (count($the_user) > 0) {
-    		$the_user['actived'] = 1;
+    		$the_user['active'] = 1;
     		$the_user['confirm_token'] = str_random(100);
     		$the_user->save();
 

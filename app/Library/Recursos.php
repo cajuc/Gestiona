@@ -94,11 +94,17 @@ class Recursos
 
     public static function obtenerTipos()
     {
-    	$user = Auth::user();
+    	$tipos = \DB::select(\DB::raw("show columns from gastos like 'tipo'"))[0]->Type;
+        preg_match('/^enum\((.*)\)$/', $tipos, $matches);
+        $enum = array();
+        
+        foreach( explode(',', $matches[1]) as $value )
+        {
+            $v = trim( $value, "'" );
+            array_push($enum, $v);
+        }
 
-    	$tipos = $user->gastos()->select('tipo')->distinct()->get();
-
-        return $tipos;
+        return $enum;
     }
 
     public static function obtenerGastosChart($year)

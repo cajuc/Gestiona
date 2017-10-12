@@ -20,6 +20,8 @@
 			</ul>
 		</div>
 		@endif
+
+		@if (count($gastos))
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
@@ -108,9 +110,13 @@
 				{{ $gastos->links() }}
 			</nav>
 		</div>
+		@else
+			<div class="alert alert-info">
+				No hay registros de gastos todavia!!
+			</div>
+		@endif
 
 		<h2 class="title-block">Crear nuevo gasto</h2>
-		<br>
 		<div class="row">
 			<form action="{{ url('/') }}/gastos/crear" method="post">
 				{{ csrf_field() }}
@@ -123,7 +129,7 @@
 								</button>
 								<ul class="dropdown-menu">
 									@foreach ($tipos as $tipo)
-									<li><a class="tipo">{{ $tipo->tipo }}</a></li>
+									<li><a class="tipo">{{ $tipo }}</a></li>
 									@endforeach
 								</ul>
 							</div>
@@ -202,7 +208,7 @@
 						<label for="">Seleccionar tipo</label>
 						<select class="form-control" id="chartTipo">
 							@forelse ($tipos as $tipo)
-							<option value="{{ $tipo->tipo }}">{{ $tipo->tipo }}</option>
+							<option value="{{ $tipo }}">{{ $tipo }}</option>
 							@empty
 							<p class="alert alert-info">No existen tipos</p>
 							@endforelse

@@ -27,52 +27,60 @@
 					@endif
 				@endif
 			</div>
-			<div class="row">
-				<div class="col-lg-6">
-					<div class="inicioContenedor">
-						<h3 class="text-center">Comienza tu gestión</h3>
-						<form action="login" method="post">
-							{{ csrf_field() }}
-							<div class="form-group">
-								<input type="email" name="inicioEmail" class="form-control" placeholder="Email" value="{{ old('inicioEmail') }}">
-							</div>
-							<div class="form-group">
-								<input type="password" name="inicioPassword" class="form-control" placeholder="Password">
-							</div>
-							<input type="submit" name="enviar" value="Iniciar Sesión" class="btn btn-block btn-info">
-						</form>
-						<br>
-						<a href="forgetPassword" class="text-danger">Olvidaste la contraseña?</a>
+			<div class="row main-container">
+				<div class="col-lg-4 col-lg-offset-2">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="text-center panel-title">Comienza tu gestión</h3>
+						</div>
+						<div class="panel-body">
+							<form action="login" method="post">
+								{{ csrf_field() }}
+								<div class="form-group">
+									<input type="email" name="inicioEmail" class="form-control" placeholder="Email" value="{{ old('inicioEmail') }}">
+								</div>
+								<div class="form-group">
+									<input type="password" name="inicioPassword" class="form-control" placeholder="Password">
+								</div>
+								<input type="submit" name="enviar" value="Iniciar Sesión" class="btn btn-block btn-info">
+							</form>
+							<br>
+							<a href="forgetPassword" class="text-danger">Olvidaste la contraseña?</a>
+						</div>
 					</div>
 				</div>
-				<div class="col-lg-6">
-					<div class="inicioContenedor">
-						<h3 class="text-center">Crea tu cuenta</h3>
-						<form action="registro" method="post">
-							{{ csrf_field() }}
-							<div class="form-group">
-								<input type="text" id="nombre" name="registroNombre" class="form-control" value="" placeholder="Nombre">
-								<span id="nombreError" class="text-danger"></span>
-							</div>
-							<div class="form-group">
-								<input type="text" name="registroApellidos" class="form-control" id="apellidos" value="" placeholder="Apellidos">
-								<span id="apellidosError" class="text-danger"></span>
-							</div>
-							<div class="form-group">
-								<input type="email" name="registroEmail" class="form-control" placeholder="Email">
-								<span id="emailError" class="text-danger"></span>
-							</div>
-							<div class="form-group">
-								<input type="password" name="registroPassword" class="form-control" placeholder="Password">
-								<span id="pwError" class="text-danger"></span>
-							</div>
-							<div class="form-group">
-								<input type="password" name="registroRePassword" class="form-control" placeholder="Repite Password">
-								<span id="pwReError" class="text-danger"></span>
-							</div>
-							<input type="submit" name="crear" value="Crear Cuenta" class="btn btn-block btn-info">
-							<span id="formError" class="text-danger" hidden>Debes rellenar correctamente todos los campos</span>
-						</form>
+				<div class="col-lg-4">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="text-center panel-title">Crea tu cuenta</h3>
+						</div>
+						<div class="panel-body">
+							<form action="registro" method="post">
+								{{ csrf_field() }}
+								<div class="form-group">
+									<input type="text" id="nombre" name="registroNombre" class="form-control" value="" placeholder="Nombre">
+									<span id="nombreError" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<input type="text" name="registroApellidos" class="form-control" id="apellidos" value="" placeholder="Apellidos">
+									<span id="apellidosError" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<input type="email" name="registroEmail" class="form-control" placeholder="Email">
+									<span id="emailError" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<input type="password" name="registroPassword" class="form-control" placeholder="Password">
+									<span id="pwError" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<input type="password" name="registroRePassword" class="form-control" placeholder="Repite Password">
+									<span id="pwReError" class="text-danger"></span>
+								</div>
+								<input type="submit" name="crear" value="Crear Cuenta" class="btn btn-block btn-info">
+								<span id="formError" class="text-danger" hidden>Debes rellenar correctamente todos los campos</span>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
