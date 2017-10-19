@@ -24,9 +24,7 @@
 				<span class="pull-right"><b>{{ $user->fondos }}€</b> disponibles</span>
 			</div>
 
-			<div class="clearfix visible-sm"></div>
-
-			<div class="col-lg-1 col-sm-2 col-xs-12 pull-right logout">
+			<div class="col-lg-1 hidden-sm pull-right logout">
 				<form action="logout" method="post">
 					{{ csrf_field() }}
 					<input type="submit" name="salir" value="Salir" class="form-control btn btn-danger">
@@ -80,6 +78,13 @@
 								<a href="{{ url('ajustes') }}"><span style="color:black" class="glyphicon glyphicon-cog"  aria-hidden="true"></span> Ajustes</a>
 							</li>
 						</ul>
+						
+						<form class="navbar-right visible-sm" action="logout" method="post">
+							{{ csrf_field() }}
+							<button type="submit" class="btn btn-lg btn-link" title="Salir">
+								<span class="glyphicon glyphicon-log-out"></span>
+							</button>
+						</form>
 					</div>
 				</div>
 			</nav>

@@ -22,8 +22,12 @@ $md-width: 768px;
 // Estilos ---------------------------------------------
 
 body{
-	padding-top: 20px;
+	background-color: white;
 	padding-bottom: 20px;
+	
+	@media (min-width: $md-width) {
+		padding-top: 20px;
+	}
 }
 
 .title{
@@ -95,21 +99,32 @@ textarea{
 }
 
 
-// Media querys ---------------------------------------------
+// Clases sobreescritas ---------------------------------------------
 
-@media (min-width: $md-width) {
-	.description{
-		font-size: 20px;
+.glyphicon-log-out{
+	button:hover &{
+		color: red;
 	}
 }
 
+
+// Media querys ---------------------------------------------
+
 @media (max-width: $md-width) {
-	.description{
+	div[class*="description"]{
 		font-size: 14px;
 	}
 }
 
 @media (min-width: $md-width){
+	div[class*="description"]{
+		font-size: 20px;
+	}
+
+	.description-right{
+		float: right;
+	}
+
 	.father{
 		position: relative;
 		padding-top: 20px;

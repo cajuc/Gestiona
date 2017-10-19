@@ -1,6 +1,12 @@
 body {
-  padding-top: 20px;
+  background-color: white;
   padding-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-top: 20px;
+  }
 }
 
 .title {
@@ -71,19 +77,25 @@ textarea {
   height: 100px;
 }
 
-@media (min-width: 768px) {
-  .description {
-    font-size: 20px;
-  }
+button:hover .glyphicon-log-out {
+  color: red;
 }
 
 @media (max-width: 768px) {
-  .description {
+  div[class*="description"] {
     font-size: 14px;
   }
 }
 
 @media (min-width: 768px) {
+  div[class*="description"] {
+    font-size: 20px;
+  }
+
+  .description-right {
+    float: right;
+  }
+
   .father {
     position: relative;
     padding-top: 20px;
