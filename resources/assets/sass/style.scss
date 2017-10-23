@@ -21,13 +21,22 @@ $md-width: 768px;
 
 // Estilos ---------------------------------------------
 
+html{
+	min-height: 100%;
+	position: relative;
+}
+
 body{
 	background-color: white;
-	padding-bottom: 20px;
 	
 	@media (min-width: $md-width) {
 		padding-top: 20px;
+		margin-bottom: 70px;
 	}
+}
+
+textarea{
+	resize: none;
 }
 
 .title{
@@ -85,10 +94,6 @@ body{
 	padding-right: 0;
 }
 
-textarea{
-	resize: none;
-}
-
 .paginacion{
 	margin-top: -22px;
 }
@@ -96,6 +101,20 @@ textarea{
 .user-image{
 	width: 100px;
 	height: 100px;
+}
+
+.footer{
+	background-color: rgb(100, 100, 100);
+	color: white;
+	position: absolute;
+	width: 100%;
+	height: 50px;
+	bottom: 0;
+
+	& > *{
+		position: absolute;
+		top: 25%;
+	}
 }
 
 

@@ -100,4 +100,8 @@
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/script.js"></script>
 </body>
+
+<footer class="footer container-fluid">
+	<span>@ 2017 - Gestiona</span>
+</footer>
 </html>
