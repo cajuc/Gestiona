@@ -13,5 +13,4 @@ Se compone de 6 módulos:
 - Ahorros:  pantalla donde se muestra un gráfico con la diferencia entre gastos e ingresos producidos mes a mes.
 - Ajustes:  pantalla donde se puede realizar diversos cambios del perfil de usuario como Nombre, Apellidos, foto de perfil...
 
-En contrucción..
-----------------
+## [Gestiona](http://gestiona.sytes.net)

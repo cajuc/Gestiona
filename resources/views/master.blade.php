@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="css/app.css">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/file-input.css">
 </head>
 <body>
 	<div class="container">
@@ -99,9 +100,10 @@
 	<script src="js/app.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/script.js"></script>
+	@stack('scriptsAjustes');
 </body>
 
-<footer class="footer container-fluid">
+<footer class="footer container">
 	<span>@ 2017 - Gestiona</span>
 </footer>
 </html>

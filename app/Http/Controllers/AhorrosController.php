@@ -7,6 +7,10 @@ use Recursos;
 
 class AhorrosController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     // Maneja la petición de acceso al apartado Ahorros
     public function index()
     {

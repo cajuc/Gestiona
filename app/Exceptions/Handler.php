@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -19,7 +20,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Auth\Access\AuthorizationException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
-        \Illuminate\Session\TokenMismatchException::class,
+        // \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
     ];
 
@@ -47,7 +48,18 @@ class Handler extends ExceptionHandler
     {
         // Manejo de excepción cuando ocurre la excepción NotFoundHttpException
         if ($exception instanceof NotFoundHttpException) {
+            if (!Auth::check()) {
+                return redirect()->route('acceso');
+            }
+
             return redirect()->route('inicio');
+        }
+
+        if ($exception instanceof TokenMismatchException) {
+            return redirect('/')->with([
+                'message' => "La sessión ha caducado, debe iniciar sesión nuevamente.",
+                'class'   => "alert-info"
+            ]);
         }
 
         return parent::render($request, $exception);

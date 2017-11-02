@@ -15,10 +15,10 @@
 $factory->define(App\User::class, function (Faker\Generator $faker) {
 
     return [
-        'name' => 'Carlos',
+         'name' => 'Carlos',
         'surnames' => 'Jurado Checa',
-        'email' => 'bycajuc@gmail.com',
-        'password' => bcrypt('bycajuc'),
+        'email' => 'example@mail.com',
+        'password' => bcrypt('password'),
         'fondos' => 0,
         'active' => 1,
         'confirm_token' => str_random(100),

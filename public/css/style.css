@@ -14,6 +14,12 @@ body {
   }
 }
 
+@media (max-width: 768px) {
+  body {
+    margin-bottom: 50px;
+  }
+}
+
 textarea {
   resize: none;
 }

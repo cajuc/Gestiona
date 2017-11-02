@@ -33,6 +33,10 @@ body{
 		padding-top: 20px;
 		margin-bottom: 70px;
 	}
+
+	@media (max-width: $md-width) {
+		margin-bottom: 50px;
+	}
 }
 
 textarea{
