@@ -2,6 +2,7 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/style.css": "/css/style.css",
+    "/js/scriptIngresos.js": "/js/scriptIngresos.js",
     "/js/script.js": "/js/script.js",
     "/js/jquery.custom-file-input.js": "/js/jquery.custom-file-input.js"
 }

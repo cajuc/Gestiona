@@ -237,20 +237,20 @@ $(function () {
 		Se le añade al campo 'concepto' del formulario de ingreso la funcionalidad para obtener una
 		lista de valores que el usario ha introducido anteriormente como concepto
 		*/
-		var conceptos = [];
-		var uri = url.pathname.substring(1, url.pathname.length);
+	var conceptos = [];
+	var uri = url.pathname.substring(1, url.pathname.length);
 
-		if (uri == 'ingresos') {
-			$.getJSON('obtenerConceptos/'+uri, function(data) {
-				$.each(data, function(index, val) {
-					conceptos.push(val.concepto);
-				});
-
-				$("#concepto, #formConcepto").autocomplete({
-					source: conceptos
-				});
+	if (uri == 'ingresos') {
+		$.getJSON('obtenerConceptos/'+uri, function(data) {
+			$.each(data, function(index, val) {
+				conceptos.push(val.concepto);
 			});
-		}
+
+			$("#concepto, #formConcepto").autocomplete({
+				source: conceptos
+			});
+		});
+	}
 
 	/////////////////////////////////////////////////
 

@@ -57,3 +57,6 @@ window.FusionCharts = require('jquery-fusioncharts');
 // Load charts module to render Column2D chart
 window.Charts = require('fusioncharts/fusioncharts.charts');
 Charts(FusionCharts);
+
+// Se carga Charts.js para crear los diferentes Charts 'graficos' de la Aplicación
+window.Chart = require('chart.js');

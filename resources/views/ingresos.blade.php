@@ -108,9 +108,9 @@
 			</nav>
 		</div>
 		@else
-			<div class="alert alert-info">
-				No hay registros de ingresos todavía!!
-			</div>
+		<div class="alert alert-info">
+			No hay registros de ingresos todavía!!
+		</div>
 		@endif
 
 		<h2 class="title-block">Crear nuevo ingreso</h2>
@@ -159,11 +159,11 @@
 
 	<div class="col-lg-5">
 		<h2 class="title-block">Evolución de Ingresos</h2>
-		<br>
+
 		<div class="row">
-			<div id="chartColumn-container" class="col-lg-12 col-xs-12"></div>
+			<canvas id="chartIngresos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" height="350"></canvas>
 		</div>
-		<br>
+
 		<div class="row">
 			<div class="col-lg-8">
 				<form class="form-inline">
@@ -184,3 +184,8 @@
 </div>
 
 @endsection
+
+{{-- Se añade los scripts necesarios para la vista Ingresos --}}
+@push('scriptsIngresos')
+<script src="js/scriptIngresos.js"></script>
+@endpush

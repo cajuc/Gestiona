@@ -32,63 +32,69 @@
 				</form>
 			</div>
 		</div>
+
 		<br class="hidden-xs">
-		<div class="menu-nav">
-			<nav class="nav navbar-default">
-				<div class="container-fluid">
-					<div class="navbar-header">
-						<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
-							<span class="sr-only">Toggle Navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-						<a class="navbar-brand">
-							<img src="images/logo.png" alt="gestiona" class="brand-image">
-						</a>
-					</div>
-					<div class="collapse navbar-collapse" id="navbar-collapse">
-						<div class="perfil visible-xs">
-							<img src="images/{{ $user->image }}" class="img-circle pull-left">
 
-							<div class="pull-right">
-								<form action="logout" method="post">
-									{{ csrf_field() }}
-									<button type="submit" class="btn btn-lg btn-link" title="Salir">
-										<span class="glyphicon glyphicon-log-out"></span>
-									</button>
-								</form>
-							</div>
-							<div class="clearfix"></div>
-						</div>
-
-						<ul class="nav navbar-nav">
-							<li class="{{ Request::is('inicio') ? 'active' : '' }}">
-								<a href="{{ url('inicio') }}"><span style="color:orange" class="glyphicon glyphicon-home"></span> Inicio</a>
-							</li>
-							<li class="{{ Request::is('ingresos') ? 'active' : '' }}">
-								<a href="{{ url('ingresos') }}"><span style="color:green" class="glyphicon glyphicon-euro" aria-hidden="true"></span> Ingresos</a>
-							</li>
-							<li class="{{ Request::is('gastos') ? 'active' : '' }}">
-								<a href="{{ url('gastos') }}"><span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span> Gastos</a>
-							</li>
-							<li class="{{ Request::is('ahorros') ? 'active' : '' }}">
-								<a href="{{ url('ahorros') }}"><span style="color:pink" class="glyphicon glyphicon-piggy-bank"  aria-hidden="true"></span> Ahorros</a>
-							</li>
-							<li class="{{ Request::is('ajustes') ? 'active' : '' }}">
-								<a href="{{ url('ajustes') }}"><span style="color:black" class="glyphicon glyphicon-cog"  aria-hidden="true"></span> Ajustes</a>
-							</li>
-						</ul>
-						
-						<form class="navbar-right visible-sm" action="logout" method="post">
-							{{ csrf_field() }}
-							<button type="submit" class="btn btn-lg btn-link" title="Salir">
-								<span class="glyphicon glyphicon-log-out"></span>
+		<div class="row">
+			<div class="menu-nav">
+				<nav class="nav navbar-default">
+					<div class="container-fluid">
+						<div class="navbar-header">
+							<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+								<span class="sr-only">Toggle Navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
 							</button>
-						</form>
+							<a class="navbar-brand" href="{{ url('/inicio') }}">
+								<img src="images/logo.png" alt="gestiona" class="brand-image">
+							</a>
+						</div>
+						<div class="collapse navbar-collapse" id="navbar-collapse">
+							<div class="perfil visible-xs text-center">
+								<img src="images/{{ $user->image }}" class="img-circle pull-left">
+
+								<span class="fondos-xs">{{ $user->fondos }} €</span>
+
+								<div class="pull-right">
+									<form action="logout" method="post">
+										{{ csrf_field() }}
+										<button type="submit" class="btn btn-lg btn-link" title="Salir">
+											<span class="glyphicon glyphicon-log-out"></span>
+										</button>
+									</form>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+
+							<ul class="nav navbar-nav">
+								<li class="{{ Request::is('inicio') ? 'active' : '' }}">
+									<a href="{{ url('inicio') }}"><span style="color:orange" class="glyphicon glyphicon-home"></span> Inicio</a>
+								</li>
+								<li class="{{ Request::is('ingresos') ? 'active' : '' }}">
+									<a href="{{ url('ingresos') }}"><span style="color:green" class="glyphicon glyphicon-euro" aria-hidden="true"></span> Ingresos</a>
+								</li>
+								<li class="{{ Request::is('gastos') ? 'active' : '' }}">
+									<a href="{{ url('gastos') }}"><span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span> Gastos</a>
+								</li>
+								<li class="{{ Request::is('ahorros') ? 'active' : '' }}">
+									<a href="{{ url('ahorros') }}"><span style="color:pink" class="glyphicon glyphicon-piggy-bank"  aria-hidden="true"></span> Ahorros</a>
+								</li>
+								<li class="{{ Request::is('ajustes') ? 'active' : '' }}">
+									<a href="{{ url('ajustes') }}"><span style="color:black" class="glyphicon glyphicon-cog"  aria-hidden="true"></span> Ajustes</a>
+								</li>
+							</ul>
+							
+							<form class="navbar-right visible-sm" action="logout" method="post">
+								{{ csrf_field() }}
+								<button type="submit" class="btn btn-lg btn-link" title="Salir">
+									<span class="glyphicon glyphicon-log-out"></span>
+								</button>
+							</form>
+						</div>
 					</div>
-				</div>
-			</nav>
+				</nav>
+			</div>
 		</div>
 
 		<br class="hidden-xs">
@@ -97,13 +103,15 @@
 
 	</div>
 
+	{{-- Carga de Scripts de la Aplicación --}}
 	<script src="js/app.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/script.js"></script>
-	@stack('scriptsAjustes');
+	@stack('scriptsAjustes')
+	@stack('scriptsIngresos')
 </body>
 
 <footer class="footer container">
-	<span>@ 2017 - Gestiona</span>
+	<span>&copy; 2017 - Gestiona</span>
 </footer>
 </html>

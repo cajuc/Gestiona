@@ -37,7 +37,6 @@ textarea {
 .brand-image {
   width: 30px;
   height: 30px;
-  margin-left: -15px;
 }
 
 .perfil {
@@ -100,6 +99,12 @@ textarea {
 .footer > * {
   position: absolute;
   top: 25%;
+}
+
+.fondos-xs {
+  line-height: 45px;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 button:hover .glyphicon-log-out {
