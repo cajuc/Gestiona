@@ -81,11 +81,10 @@ $(function () {
 	var uri = "http://gestiona.app/ingresosChart/"; // Dirección para obtener los datos del Chart
 	var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 	var yearDefault = $("#year").val(); // Se obtiene el año seleccionado por defecto
-	var backgroundsColor = []; // Colores de fondo asignados a cada item del chart
-	var hoverBackgroundsColor = []; // Colores de fondo :hover asignados a cada item
+	var colors = ['#008b8b', '#ff0000', '#008000', '#ffff00', '#00ffff', '#8b008b', '#dc143c', '#ff7f50', '#b22222', '#ffd700', '#808080', '#ffa500'];
 
 	// Se crea la instancia de la clase Chart
-	window.myChart = new Chart(ctx, {
+	var myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
 			labels: [],
@@ -101,7 +100,22 @@ $(function () {
 						beginAtZero: true,
 						// Incluir símbolo de €
 						callback: function callback(value, index, values) {
-							return value + '€';
+							var data = "";
+							var valor = value.toString();
+
+							if (index == values.length - 1) {
+								return valor + " €";
+							}
+
+							if (value >= 1000) {
+								data = data.concat(valor.substring(0, valor.length - 3), " mil");
+							} else if (value >= 1000000) {
+								data = data.concat(valor.substring(0, valor.length - 6), " M");
+							} else {
+								data = valor;
+							}
+
+							return data;
 						}
 					},
 					gridLines: {
@@ -138,20 +152,28 @@ $(function () {
 		}
 	});
 
+	// Maneja el evento change del input #year
+	$("#year").change(function (event) {
+		var year = $(this).val();
+
+		// Se recargará con los datos correspondientes al año elegido
+		chart(year);
+	});
+
 	function chart() {
 		var year = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : yearDefault;
 
 		$.getJSON(uri + year, function (data) {
 			var ctxHeight = myChart.height;
-			var datos = [];
-			var labels = [];
 			var bgColor = "";
 			var bgColorHover = "";
 			var gradient = void 0,
 			    gradientHover = "";
-			var middleOffset = 0; // Valor offset del segundo addColorStop del gradient
 			var yStart = 0; // Valor que índica donde empieza a pintarse el gradient
-			var colors = ['#008b8b', '#ff0000', '#008000', '#ffff00', '#00ffff', '#8b008b', '#dc143c', '#ff7f50', '#b22222', '#ffd700', '#20b2aa', '#ffa500'];
+			var backgroundsColor = []; // Colores de fondo asignados a cada item del chart
+			var hoverBackgroundsColor = []; // Colores de fondo :hover asignados a cada item
+			var datos = []; // Datos del chart
+			var labels = []; // Labels del chart
 
 			// Se crea un array con las cantidades de los ingresos obtenidos
 			var values = $.map(data, function (item, index) {
@@ -192,31 +214,85 @@ $(function () {
 				hoverBackgroundsColor.push(gradientHover);
 			});
 
-			// Se informa el chart con los datos obtenidos
-			myChart.data.labels = labels;
-			myChart.options.title.text = 'Evolución de ' + year;
-			myChart.data.datasets.forEach(function (dataset) {
-				dataset.data = datos;
-				dataset.backgroundColor = backgroundsColor;
-				dataset.hoverBackgroundColor = hoverBackgroundsColor;
-			});
-
-			// Se actualiza el chart
-			myChart.update();
-
-			// Función para obtener el valor de 'y0' por el que debe empezar a pintarse el gradient
-			function getHeight(maxItem, currentItem, ctxHeight) {
-				return ctxHeight - Math.floor(ctxHeight * currentItem / maxItem);
-			}
+			updateChart(datos, labels, backgroundsColor, hoverBackgroundsColor, year);
 		});
 	}
 
-	// Cuando se elija otro año se recargará con los datos correspondientes al año elegido
-	$("#year").change(function (event) {
-		var year = $(this).val();
+	// Función para obtener el valor de 'y0' por el que debe empezar a pintarse el gradient
+	function getHeight(maxItem, currentItem, ctxHeight) {
+		return ctxHeight - Math.floor(ctxHeight * currentItem / maxItem);
+	}
 
-		chart(year);
+	// Función encargada de actualizar los datos del chart
+	function updateChart(datos, labels, backgroundsColor, hoverBackgroundsColor, year) {
+		// Se informa el chart con los datos obtenidos
+		myChart.data.labels = labels;
+		myChart.options.title.text = 'Evolución de ' + year;
+		myChart.data.datasets.forEach(function (dataset) {
+			dataset.data = datos;
+			dataset.backgroundColor = backgroundsColor;
+			dataset.hoverBackgroundColor = hoverBackgroundsColor;
+		});
+
+		// Se actualiza el chart
+		myChart.update();
+	}
+
+	/////////////////////////////////////////////////
+
+
+	// Muestra el formulario para editar el ingreso/gasto seleccionado
+
+	$(".editForm").click(function (event) {
+		var id = $(this).val();
+		var url = '/ingresos/';
+
+		$("#formConcepto").val($("#concepto-" + id).text());
+		$("#formFecha").val($("#fecha-" + id).text());
+		$("#formCantidad").val($("#cantidad-" + id + " span").text());
+		$("#formComentario").val($("#comentario-" + id).text());
+
+		// Asignar el valor a la propiedad 'action' del formulario con el id del ingreso seleccionado
+		// $(".formEdit form").attr('action', );("/id/" + id + "/edit");
+		$(".formEdit form").attr('action', url + id + "/edit");
+
+		// Se despliega el formulario
+		$(".formEdit").fadeIn('slow');
 	});
+
+	// Oculta el formulario de edición de ingresos/gastos
+
+	$("#cerrarForm").click(function (event) {
+		$(".formEdit").fadeOut('slow');
+	});
+
+	/////////////////////////////////////////////////
+
+	/*
+ 	Se le añade al campo 'concepto' del formulario de ingreso la funcionalidad para obtener una
+ 	lista de valores que el usario ha introducido anteriormente como concepto
+ */
+	$.getJSON('/obtenerConceptos/ingresos', function (data) {
+		var conceptos = [];
+
+		$.each(data, function (index, val) {
+			conceptos.push(val.concepto);
+		});
+
+		$("#concepto, #formConcepto").autocomplete({
+			source: conceptos
+		});
+	});
+
+	// Se obtiene los conceptos de ingresos del usuario
+	$(".concepto").click(function (event) {
+		event.preventDefault();
+
+		$("#concepto").val($(this).text());
+		$("#dropdown-menu").toggle();
+	});
+
+	/////////////////////////////////////////////////
 
 	// Se llama la función chart al cargar por primera vez la página
 	chart();

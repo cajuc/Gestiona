@@ -18,7 +18,7 @@ class CreateIngresosTable extends Migration
             $table->string('concepto', 30);
             $table->string('comentario')->nullable();
             $table->date('fecha');
-            $table->float('cantidad');
+            $table->float('cantidad', 12, 2);
             $table->timestamps();
         });
 

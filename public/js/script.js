@@ -229,33 +229,33 @@ $(function () {
 	/*
  	Muestra el formulario para editar el ingreso/gasto seleccionado
  	*/
-	$(".editForm").click(function (event) {
-		var id = $(this).val();
-		var url = window.location.pathname.substring(1, window.location.pathname.length) + "/";
+	// 	$(".editForm").click(function(event) {
+	// 		var id = $(this).val();
+	// 		var url = window.location.pathname.substring(1, window.location.pathname.length) + "/";
 
-		if (url === 'gastos/') {
-			$("#formTipo").val($("#tipo-" + id).text());
-		}
+	// 		if (url === 'gastos/') {
+	// 			$("#formTipo").val($("#tipo-"+id).text());
+	// 		}
 
-		$("#formConcepto").val($("#concepto-" + id).text());
-		$("#formFecha").val($("#fecha-" + id).text());
-		$("#formCantidad").val($("#cantidad-" + id + " span").text());
-		$("#formComentario").val($("#comentario-" + id).text());
+	// 		$("#formConcepto").val($("#concepto-"+id).text());
+	// 		$("#formFecha").val($("#fecha-"+id).text());
+	// 		$("#formCantidad").val($("#cantidad-"+id+" span").text());
+	// 		$("#formComentario").val($("#comentario-"+id).text());
 
-		// Asignar el valor a la propiedad 'action' del formulario con el id del ingreso seleccionado
-		// $(".formEdit form").attr('action', );("/id/" + id + "/edit");
-		$(".formEdit form").attr('action', url + id + "/edit");
+	// 	// Asignar el valor a la propiedad 'action' del formulario con el id del ingreso seleccionado
+	// 	// $(".formEdit form").attr('action', );("/id/" + id + "/edit");
+	// 	$(".formEdit form").attr('action', url + id + "/edit");
 
-		// Se despliega el formulario
-		$(".formEdit").fadeIn('slow');
-	});
+	// 	// Se despliega el formulario
+	// 	$(".formEdit").fadeIn('slow');
+	// });
 
 	/*
  	Oculta el formulario de edición de ingresos/gastos
  	*/
-	$("#cerrarForm").click(function (event) {
-		$(".formEdit").fadeOut('slow');
-	});
+	// $("#cerrarForm").click(function(event) {
+	// 	$(".formEdit").fadeOut('slow');
+	// });
 
 	/////////////////////////////////////////////////
 
@@ -273,12 +273,12 @@ $(function () {
  	*/
 	$("#dropdownConcepto").hide();
 
-	$(".dropdown-menu, .dropdown-menu .concepto").on('click', '.concepto', function (event) {
-		event.preventDefault();
+	// $(".dropdown-menu, .dropdown-menu .concepto").on('click', '.concepto', function(event) {
+	// 	event.preventDefault();
 
-		$("#concepto").val($(this).text());
-		$("#dropdown-menu").toggle();
-	});
+	// 	$("#concepto").val($(this).text());
+	// 	$("#dropdown-menu").toggle();
+	// });
 
 	/*
  	Se obtiene los tipos de gasto del usuario
@@ -291,12 +291,12 @@ $(function () {
 		$("#tipo, #tipoConcepto").val($(this).text());
 
 		// Se carga los conceptos en base al tipo de concepto seleccionado
-		$.getJSON('obtenerConceptos/gastos/tipo/' + tipo, function (data) {
+		$.getJSON('/obtenerConceptos/gastos/tipo/' + tipo, function (data) {
 			// Primero se eliminan, si hubieran, los conceptos existentes
 			$("#dropdownConcepto li").remove();
 
 			$.each(data, function (index, val) {
-				conceptos.push(val['concepto']);
+				conceptos.push(val.concepto);
 
 				$("<li>").append($("<a>").text(val['concepto']).addClass('concepto')).appendTo('#dropdownConcepto');
 			});
@@ -313,20 +313,20 @@ $(function () {
  	Se le añade al campo 'concepto' del formulario de ingreso la funcionalidad para obtener una
  	lista de valores que el usario ha introducido anteriormente como concepto
  	*/
-	var conceptos = [];
+	// var conceptos = [];
 	var uri = url.pathname.substring(1, url.pathname.length);
 
-	if (uri == 'ingresos') {
-		$.getJSON('obtenerConceptos/' + uri, function (data) {
-			$.each(data, function (index, val) {
-				conceptos.push(val.concepto);
-			});
+	// if (uri == 'ingresos') {
+	// 	$.getJSON('obtenerConceptos/'+uri, function(data) {
+	// 		$.each(data, function(index, val) {
+	// 			conceptos.push(val.concepto);
+	// 		});
 
-			$("#concepto, #formConcepto").autocomplete({
-				source: conceptos
-			});
-		});
-	}
+	// 		$("#concepto, #formConcepto").autocomplete({
+	// 			source: conceptos
+	// 		});
+	// 	});
+	// }
 
 	/////////////////////////////////////////////////
 
@@ -346,39 +346,36 @@ $(function () {
 			var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
 			switch (uri) {
-				case 'ingresos':
-					var widthChart = $("#chartColumn-container").width(); // Ancho del contenedor CHART
-
-					$.each(data, function (index, val) {
-						// Se añade un nuevo objeto al array datos
-						datos.push({
-							label: meses[val.month - 1],
-							value: val.cantidad
-						});
-					});
-
-					$("#chartColumn-container").insertFusionCharts({
-						type: "column2d",
-						width: widthChart,
-						height: "350",
-						dataFormat: "json",
-						dataSource: {
-							chart: {
-								caption: "Evolución del Año " + year,
-								subCaption: " ",
-								numberPrefix: "€",
-								showBorder: 0,
-								showCanvasBorder: 0,
-								divLineDashed: 1,
-								bgColor: "#ffffff",
-								theme: "fint",
-								plotBorderAlpha: 10
-							},
-							data: datos
-						}
-					});
-
-					break;
+				/*case 'ingresos':
+    	var widthChart = $("#chartColumn-container").width();	// Ancho del contenedor CHART
+    		$.each(data, function(index, val){
+    		// Se añade un nuevo objeto al array datos
+    		datos.push({
+    			label: meses[val.month-1],
+    			value: val.cantidad
+    		});
+    	});
+    		$("#chartColumn-container").insertFusionCharts({
+    		type: "column2d",
+    		width: widthChart,
+    		height: "350",
+    		dataFormat: "json",
+    		dataSource: {
+    			chart: {
+    				caption: "Evolución del Año " + year,
+    				subCaption: " ",
+    				numberPrefix: "€",
+    				showBorder: 0,
+    				showCanvasBorder: 0,
+    				divLineDashed: 1,
+    				bgColor:"#ffffff",
+    				theme: "fint",
+    				plotBorderAlpha: 10,
+    			},
+    			data: datos
+    		}
+    	});
+    		break;*/
 				case 'gastos':
 					var widthChart = $("#chartStacked-container").width(); // Ancho del contenedor CHART
 					var tipo = $("#chartTipo").val();

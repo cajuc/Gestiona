@@ -16,7 +16,7 @@ class CreateGastosTable extends Migration
         Schema::create('gastos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('concepto', 30);
-            $table->float('cantidad');
+            $table->float('cantidad', 12, 2);
             $table->string('comentario')->nullable();
             $table->date('fecha');
             $table->enum('tipo', ['fijo', 'variable', 'fijo-variable']);
