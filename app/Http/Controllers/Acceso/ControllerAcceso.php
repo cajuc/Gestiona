@@ -17,13 +17,18 @@ class ControllerAcceso extends Controller
 		Si las credenciales no son correctas se devuelve un mensaje de error
 	*/
     public function login(Request $request){
-    	if (Auth::attempt([
+    	$remember_me = false;
+
+        if (isset($request->remember_me)) {
+            $remember_me = true;
+        }
+
+        if (Auth::attempt([
     			'email' => $request->input('inicioEmail'), 
     			'password' => $request->input('inicioPassword'), 
     			'active' => 1
-        ])) {
-
-    		return redirect()->action('ControllerMain@inicio');
+        ], $remember_me)) {
+    		return redirect('inicio');
     	}else{
     		return redirect('/')->with([
     			'message' => 'El email/contraseña no son correctos o su cuenta aún no ha sido activada',

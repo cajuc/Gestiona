@@ -126,7 +126,7 @@ class ControllerMain extends Controller
 	*/
 	public function crearIngreso(Request $request){
 		$validator = Validator::make($request->all(), [
-			'concepto' 		=> 'required|max:30',
+			'concepto' 		=> 'required|alpha|max:30',
 			'fecha'			=> 'required|date_format:Y-m-d',
 			'cantidad'		=> 'required|numeric'
 		]);
@@ -299,7 +299,7 @@ class ControllerMain extends Controller
 
 		$validator = Validator::make($request->all(), [
 			'tipo'			=> 'required',
-			'concepto' 		=> 'required|max:30',
+			'concepto' 		=> 'required|alpha|max:30',
 			'fecha'			=> 'required|date_format:Y-m-d',
 			'cantidad'		=> 'required|numeric|max:'.$user->fondos
 		]);

@@ -1,5 +1,6 @@
 $(function(){
 	var ctx                   = $("#chartIngresos");	// Se obtiene el contexto o contenedor para el Chart
+	var ctxHeight             = ctx.height;	// Height del canvas
 	var uri                   = "http://gestiona.app/ingresosChart/";	// Dirección para obtener los datos del Chart
 	var meses                 = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 	var yearDefault           = $("#year").val();	// Se obtiene el año seleccionado por defecto
@@ -22,22 +23,11 @@ $(function(){
 						beginAtZero:true,
 						// Incluir símbolo de €
 						callback: function(value, index, values){
-							let data = "";
-							let valor = value.toString();
-
 							if (index == values.length-1) {
-								return valor + " €";
+								return value + " €";
 							}
 
-							if (value >= 1000) {
-								data = data.concat(valor.substring(0, valor.length-3), " mil");
-							}else if(value >= 1000000){
-								data = data.concat(valor.substring(0, valor.length-6), " M");
-							}else{
-								data = valor;
-							}
-
-							return data;
+							return value;
 						}
 					},
 					gridLines: {
@@ -84,11 +74,8 @@ $(function(){
 
 	function chart(year = yearDefault){
 		$.getJSON(uri + year, function(data){
-			let ctxHeight               = myChart.height;
 			let bgColor                 = "";
 			let bgColorHover            = "";
-			let gradient, gradientHover = "";
-			let yStart                  = 0;	// Valor que índica donde empieza a pintarse el gradient
 			let backgroundsColor        = [];	// Colores de fondo asignados a cada item del chart
 			let hoverBackgroundsColor   = [];	// Colores de fondo :hover asignados a cada item
 			let datos                   = [];	// Datos del chart
@@ -106,11 +93,6 @@ $(function(){
 
 			// Con los datos obtenidos se convierten para pasarlos como parametros del Chart
 			$.each(data, function(index, val){
-				yStart = getHeight(max, val.cantidad, ctxHeight);
-
-				gradient      = myChart.ctx.createLinearGradient(0,yStart,0,ctxHeight);
-				gradientHover = myChart.ctx.createLinearGradient(0,yStart,0,ctxHeight);
-
 				// Labels que se mostrarán en el chart
 				labels.push(meses[val.month-1]);
 
@@ -118,28 +100,16 @@ $(function(){
 				datos.push(val.cantidad);
 
 				// Color del background
-				bgColor = colors[index] + "ff";
+				bgColor      = colors[index] + "ff";
 				bgColorHover = colors[index] + "bb"
 
-				// Se añade el color
-				gradient.addColorStop(0, bgColor);
-				gradient.addColorStop(1, 'white');
-				
-				gradientHover.addColorStop(0, bgColorHover);
-				gradientHover.addColorStop(1, 'white');
-
 				// Se añade el background para cada item del chart
-				backgroundsColor.push(gradient);
-				hoverBackgroundsColor.push(gradientHover);
+				backgroundsColor.push(bgColor);
+				hoverBackgroundsColor.push(bgColorHover);
 			});
 
 			updateChart(datos, labels, backgroundsColor, hoverBackgroundsColor, year);
 		});
-	}
-
-	// Función para obtener el valor de 'y0' por el que debe empezar a pintarse el gradient
-	function getHeight(maxItem, currentItem, ctxHeight){
-		return ctxHeight - Math.floor((ctxHeight * currentItem) / maxItem);
 	}
 	
 	// Función encargada de actualizar los datos del chart
@@ -157,8 +127,8 @@ $(function(){
 		myChart.update();
 	}
 
-	/////////////////////////////////////////////////
 
+	/////////////////////////////////////////////////
 	
 	// Muestra el formulario para editar el ingreso/gasto seleccionado
 	

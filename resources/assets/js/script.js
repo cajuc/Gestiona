@@ -150,6 +150,25 @@ $(function () {
 
 	/////////////////////////////////////////////////
 
+	// Se ocultan los alerts tras unos segundos
+	$(".alert").delay('3000').fadeOut('slow');
+
+	// Se muestra el texto completo del comentario
+	$(".show-more").click(function(event) {
+		event.preventDefault();
+		let id = $(this).attr('data-show');
+
+		if ($(this).attr('data-state') == 'false') {
+			$(this).attr('data-state', 'true');
+			$(this).text('... menos');
+		}else{
+			$(this).attr('data-state', 'false');
+			$(this).text('... más');
+		}
+
+		$(".text-completo-"+id+ ", .text-abreviado-"+id).toggle();
+	});
+
 	/*
 		Muestra el formulario para editar el ingreso/gasto seleccionado
 		*/

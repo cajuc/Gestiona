@@ -12,6 +12,11 @@
 */
 
 Route::get('/', function () {
+	// Determina si el usuario fue autenticado usando la cookie 'remember me'
+    if (Auth::viaRemember()) {
+        return redirect('inicio');
+    }
+
 	return view('acceso');
 })->middleware('guest')->name('acceso');
 

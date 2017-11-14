@@ -1,4 +1,4 @@
-@extends('master');
+@extends('master')
 @section('title', $title)
 @section('content-body')
 <div class="row">

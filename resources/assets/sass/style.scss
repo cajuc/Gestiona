@@ -89,10 +89,6 @@ textarea{
 	margin-top: 50px;
 }
 
-.formEdit{
-	background-color: #c9f3ff;
-}
-
 .formEdit div{
 	padding-right: 0;
 }
@@ -126,12 +122,44 @@ textarea{
 	font-size: 20px;
 }
 
+.btn-action{
+	color: #636b6f;
+}
+
+.show-more{
+	text-decoration: none;
+	color: white;
+
+	&:hover{
+		text-decoration: none;
+		color: white;
+		cursor: pointer;
+	}
+}
+
 
 // Clases sobreescritas ---------------------------------------------
+
+.input-group > .glyphicon{
+	top: 0;
+}
 
 .glyphicon-log-out{
 	button:hover &{
 		color: red;
+	}
+}
+
+.btn-link{
+	padding-top: 2px;
+	padding-bottom: 2px;
+
+	&:hover, &:focus{
+		text-decoration: none;
+	}
+
+	&:hover .btn-action{
+		color: #2b2b2b;
 	}
 }
 
@@ -142,12 +170,24 @@ textarea{
 	div[class*="description"]{
 		font-size: 14px;
 	}
+
+	.title-block{
+		font-size: 24px;
+	}
 }
 
 @media (min-width: $md-width){
 	div[class*="description"]{
 		font-size: 20px;
 	}
+
+	.table{
+		& th{
+			font-size: 18px;
+		}
+	}
+
+
 
 	.description-right{
 		float: right;

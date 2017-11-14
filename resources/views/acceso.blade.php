@@ -34,7 +34,7 @@
 							<h3 class="text-center panel-title">Comienza tu gestión</h3>
 						</div>
 						<div class="panel-body">
-							<form action="login" method="post">
+							<form action="{{ url('/login') }}" method="post">
 								{{ csrf_field() }}
 								<div class="form-group">
 									<input type="email" name="inicioEmail" class="form-control" placeholder="Email" value="{{ old('inicioEmail') }}">
@@ -42,7 +42,14 @@
 								<div class="form-group">
 									<input type="password" name="inicioPassword" class="form-control" placeholder="Password">
 								</div>
-								<input type="submit" name="enviar" value="Iniciar Sesión" class="btn btn-block btn-info">
+								<div class="form-group">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="remember_me"> Recuérdame
+										</label>
+									</div>
+								</div>
+								<button type="submit" class="btn btn-block btn-info">Iniciar Sesión</button>
 							</form>
 							<br>
 							<a href="forgetPassword" class="text-danger">Olvidaste la contraseña?</a>

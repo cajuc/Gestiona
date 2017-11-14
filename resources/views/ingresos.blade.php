@@ -2,7 +2,7 @@
 @section('title', $title)
 @section('content-body')
 <div class="row">
-	<div class="col-lg-7">
+	<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 		<h2 class="title-block">Historial de Ingresos</h2>
 		@if (Session::get('message'))
 		@if (Session::get('class'))
@@ -27,14 +27,14 @@
 
 		@if (count($ingresos))
 		<div class="table-responsive">
-			<table class="table table-striped">
+			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>Concepto</th>
-						<th>Fecha</th>
-						<th>Cantidad</th>
-						<th>Comentario</th>
-						<th></th>
+						<th class="col-md-2 col-lg-2">Concepto</th>
+						<th class="col-md-2 col-lg-2">Fecha</th>
+						<th class="col-md-2 col-lg-2">Cantidad</th>
+						<th class="col-md-5 col-lg-5">Comentario</th>
+						<th class="col-md-1 col-lg-1"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -43,22 +43,27 @@
 						<td class="text-capitalize" id="concepto-{{ $ingreso->id }}">{{ $ingreso->concepto }}</td>
 						<td id="fecha-{{ $ingreso->id }}">{{ $ingreso->fecha }}</td>
 						<td id="cantidad-{{ $ingreso->id }}"><span>{{ $ingreso->cantidad }}</span> €</td>
-						<td class="text-justify" id="comentario-{{ $ingreso->id }}">{{ $ingreso->comentario }}</td>
-						<td>
-							<div class="btn-toolbar" role="toolbar">
-								<div class="btn-group">
-									<form action="{{ url('ingresos') }}/{{ $ingreso->id }}" method="post">
-										{{ method_field('DELETE') }}
-										{{ csrf_field() }}
-										<button type="submit" class="btn btn-default btn-sm" title="Borrar">
-											<span style="color: red" class="glyphicon glyphicon-trash"></span>
-										</button>
-									</form>
-									<button class="btn btn-default btn-sm editForm" type="button" title="Editar" value="{{ $ingreso->id }}">
-										<span style="color: blue" class="glyphicon glyphicon-edit"></span>
-									</button>
-								</div>
-							</div>
+						<td class="text-justify" id="comentario-{{ $ingreso->id }}">
+							<span class="text-abreviado-{{ $ingreso->id }}">{{ substr($ingreso->comentario, 0, 60) }}</span>
+							<span class="text-completo-{{ $ingreso->id }}" hidden>{{ $ingreso->comentario }}</span>
+							{{-- En caso de no haber comentario no se mostrará el enlace --}}
+							@if ($ingreso->comentario && strlen($ingreso->comentario) > 60)
+							<span class="label label-default"><a class="show-more" data-state="false" data-show="{{ $ingreso->id }}">... más</a></span>
+							@endif
+						</td>
+						<td>	
+							<form action="{{ url('ingresos/'. $ingreso->id) }}" method="post">
+								{{ method_field('DELETE') }}
+								{{ csrf_field() }}
+								<button type="submit" class="btn btn-link" title="Borrar">
+									<span style="color: red" class="glyphicon glyphicon-trash"></span>
+									<span class="btn-action">Eliminar</span>
+								</button>
+							</form>
+							<button class="btn btn-link editForm" type="button" title="Editar" value="{{ $ingreso->id }}">
+								<span style="color: blue" class="glyphicon glyphicon-edit"></span>
+								<span class="btn-action">Editar</span>
+							</button>
 						</td>
 					</tr>
 					@endforeach
@@ -87,37 +92,39 @@
 								</div>
 							</td>
 							<td>
-								<div class="btn-toolbar" role="toolbar">
-									<div class="btn-group">
-										<button class="btn btn-default btn-sm" type="submit" title="Editar">
-											<span style="color: blue" class="glyphicon glyphicon-edit"></span>
-										</button>
-										<span></span>
-										<button id="cerrarForm" class="btn btn-default btn-sm" type="button" title="Cerrar">
-											<span style="color: red" class="glyphicon glyphicon-remove"></span>
-										</button>
-									</div>
-								</div>
+								<button class="btn btn-link" type="submit" title="Guardar">
+									<span style="color: blue" class="glyphicon glyphicon-save"></span>
+									<span class="btn-action">Guardar</span>
+								</button>
+								<span></span>
+								<button id="cerrarForm" class="btn btn-link" type="button" title="Cerrar">
+									<span style="color: red" class="glyphicon glyphicon-remove"></span>
+									<span class="btn-action">Cerrar</span>
+								</button>
 							</td>
 						</form>
 					</tr>
 				</tbody>
 			</table>
-			<nav class="text-center paginacion" aria-label="mostrar ingresos">
-				{{ $ingresos->links() }}
-			</nav>
 		</div>
+		<nav class="text-center paginacion" aria-label="mostrar ingresos">
+			{{ $ingresos->links() }}
+		</nav>
 		@else
 		<div class="alert alert-info">
 			No hay registros de ingresos todavía!!
 		</div>
 		@endif
 
+		
+	</div>
+
+	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 		<h2 class="title-block">Crear nuevo ingreso</h2>
 		<div class="row">
 			<form action="{{ url('/') }}/ingresos/crear" method="post">
 				{{ csrf_field() }}
-				<div class="col-lg-4">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-btn">
@@ -134,20 +141,25 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-3">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 					<div class="form-group">
-						<input type="date" name="fecha" value="{{ date("Y-m-d") }}" class="form-control datepicker">
+						<div class="input-group">
+							<span class="input-group-addon glyphicon glyphicon-calendar" id="calendar-addon"></span>
+							<input type="text" name="fecha" value="{{ date("Y-m-d") }}" class="form-control  datepicker" aria-label="calendar-addon">
+						</div>
 					</div>
 				</div>
-				<div class="col-lg-3">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 					<div class="form-group">
-						<input type="number" name="cantidad" min="0" placeholder="Cantidad" class="form-control">
+						<div class="input-group">
+							<span class="input-group-addon glyphicon glyphicon-euro" id="cantidad-addon"></span>
+							<input type="number" name="cantidad" min="0" placeholder="Cantidad" class="form-control" aria-label="cantidad-addon">
+						</div>
 					</div>
 				</div>
-				<div class="clearfix"></div>
 				<div class="col-lg-12">
 					<div class="form-group">
-						<textarea name="comentario" placeholder="Comentario" maxlength="200" class="form-control"></textarea>
+						<textarea name="comentario" placeholder="Comentario" maxlength="200" rows="3" class="form-control"></textarea>
 					</div>
 				</div>
 				<div class="col-lg-12">
@@ -157,13 +169,12 @@
 		</div>
 	</div>
 
-	<div class="col-lg-5">
+</div>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		
 		<h2 class="title-block">Evolución de Ingresos</h2>
-
-		<div class="row">
-			<canvas id="chartIngresos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" height="350"></canvas>
-		</div>
-
 		<div class="row">
 			<div class="col-lg-8">
 				<form class="form-inline">
@@ -180,9 +191,10 @@
 				</form>
 			</div>
 		</div>
-	</div>
-</div>
 
+	</div>
+	<canvas id="chartIngresos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" height="350"></canvas>
+</div>
 @endsection
 
 {{-- Se añade los scripts necesarios para la vista Ingresos --}}
