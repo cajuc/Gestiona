@@ -48,10 +48,6 @@ class Handler extends ExceptionHandler
     {
         // Manejo de excepción cuando ocurre la excepción NotFoundHttpException
         if ($exception instanceof NotFoundHttpException) {
-            if (!Auth::check()) {
-                return redirect()->route('acceso');
-            }
-
             return redirect()->route('inicio');
         }
 

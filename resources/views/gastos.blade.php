@@ -2,7 +2,7 @@
 @section('title', $title)
 @section('content-body')
 <div class="row">
-	<div class="col-lg-8">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
 		<h2 class="title-block">Historial de Gastos</h2>
 		@if (Session::get('message'))
 		<div class="alert text-center {{ Session::get('class') ? Session::get('class') : 'alert-success' }}" role="alert">
@@ -24,12 +24,12 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th>Tipo</th>
-						<th>Concepto</th>
-						<th>Fecha</th>
-						<th>Cantidad</th>
-						<th>Comentario</th>
-						<th></th>
+						<th class="col-sm-1 col-md-1 col-lg-2">Tipo</th>
+						<th class="col-sm-2 col-md-2 col-lg-3">Concepto</th>
+						<th class="col-sm-2 col-md-2 col-lg-1">Fecha</th>
+						<th class="col-sm-1 col-md-1 col-lg-1">Cantidad</th>
+						<th class="col-sm-5 col-md-5 col-lg-4">Comentario</th>
+						<th class="col-sm-1 col-md-1 col-lg-1"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -39,22 +39,27 @@
 						<td class="text-capitalize" id="concepto-{{ $gasto->id }}">{{ $gasto->concepto }}</td>
 						<td id="fecha-{{ $gasto->id }}">{{ $gasto->fecha }}</td>
 						<td id="cantidad-{{ $gasto->id }}"><span>{{ $gasto->cantidad }}</span> €</td>
-						<td class="text-justify" id="comentario-{{ $gasto->id }}">{{ $gasto->comentario }}</td>
+						<td class="text-justify" id="comentario-{{ $gasto->id }}" data-value="{{ $gasto->comentario }}">
+							<span class="text-abreviado-{{ $gasto->id }}">{{ substr($gasto->comentario, 0, 60) }}</span>
+							<span class="text-completo-{{ $gasto->id }}" hidden>{{ $gasto->comentario }}</span>
+							{{-- En caso de no haber comentario no se mostrará el enlace --}}
+							@if ($gasto->comentario && strlen($gasto->comentario) > 60)
+							<span class="label label-default"><a class="show-more" data-state="false" data-show="{{ $gasto->id }}">... más</a></span>
+							@endif
+						</td>
 						<td>
-							<div class="btn-toolbar" role="toolbar">
-								<div class="btn-group">
-									<form action="{{ url('gastos') }}/{{ $gasto->id }}" method="post">
-										{{ method_field('DELETE') }}
-										{{ csrf_field() }}
-										<button type="submit" class="btn btn-default btn-sm" title="Borrar">
-											<span style="color: red" class="glyphicon glyphicon-trash"></span>
-										</button>
-									</form>
-									<button class="btn btn-default btn-sm editForm" type="button" title="Editar" value="{{ $gasto->id }}">
-										<span style="color: blue" class="glyphicon glyphicon-edit"></span>
-									</button>
-								</div>
-							</div>
+							<form action="{{ url('/gastos/'. $gasto->id) }}" method="post">
+								{{ method_field('DELETE') }}
+								{{ csrf_field() }}
+								<button type="submit" class="btn btn-link" title="Borrar">
+									<span style="color: red" class="glyphicon glyphicon-trash"></span>
+									<span class="btn-action">Eliminar</span>
+								</button>
+							</form>
+							<button class="btn btn-link editForm" type="button" title="Editar" value="{{ $gasto->id }}">
+								<span style="color: blue" class="glyphicon glyphicon-edit"></span>
+								<span class="btn-action">Editar</span>
+							</button>
 						</td>
 					</tr>
 					@endforeach
@@ -74,7 +79,7 @@
 							</td>
 							<td>
 								<div class="form-group">
-									<input type="date" class="form-control datepicker" name="fecha" id="formFecha">
+									<input type="text" class="form-control datepicker" name="fecha" id="formFecha">
 								</div>
 							</td>
 							<td>
@@ -88,17 +93,15 @@
 								</div>
 							</td>
 							<td>
-								<div class="btn-toolbar" role="toolbar">
-									<div class="btn-group">
-										<button class="btn btn-default btn-sm" type="submit" title="Editar">
-											<span style="color: blue" class="glyphicon glyphicon-edit"></span>
-										</button>
-										<span></span>
-										<button id="cerrarForm" class="btn btn-default btn-sm" type="button" title="Cerrar">
-											<span style="color: red" class="glyphicon glyphicon-remove"></span>
-										</button>
-									</div>
-								</div>
+								<button class="btn btn-link" type="submit" title="Guardar">
+									<span style="color: blue" class="glyphicon glyphicon-save"></span>
+									<span class="btn-action">Guardar</span>
+								</button>
+								<span></span>
+								<button id="cerrarForm" class="btn btn-link" type="button" title="Cerrar">
+									<span style="color: red" class="glyphicon glyphicon-remove"></span>
+									<span class="btn-action">Cerrar</span>
+								</button>
 							</td>
 						</form>
 					</tr>
@@ -114,11 +117,14 @@
 		</div>
 		@endif
 
+	</div>
+
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
 		<h2 class="title-block">Crear nuevo gasto</h2>
 		<div class="row">
 			<form action="{{ url('/') }}/gastos/crear" method="post">
 				{{ csrf_field() }}
-				<div class="col-lg-3">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-12">
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-btn">
@@ -136,7 +142,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-12">
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-btn">
@@ -149,36 +155,43 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-3">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-12">
 					<div class="form-group">
-						<input type="date" name="fecha" value="{{ date("Y-m-d") }}" class="form-control datepicker">
+						<div class="input-group">
+							<span class="input-group-addon glyphicon glyphicon-calendar" id="calendar-addon"></span>
+							<input type="text" name="fecha" value="{{ date("Y-m-d") }}" class="form-control  datepicker" aria-label="calendar-addon">
+						</div>
 					</div>
 				</div>
-				<div class="col-lg-2">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-12">
 					<div class="form-group">
-						<input type="number" name="cantidad" min="0" placeholder="€" title="Cantidad" class="form-control">
+						<div class="input-group">
+							<span class="input-group-addon glyphicon glyphicon-euro" id="cantidad-addon"></span>
+							<input type="number" name="cantidad" min="0" placeholder="Cantidad" class="form-control" aria-label="cantidad-addon">
+						</div>
 					</div>
 				</div>
-				<div class="clearfix"></div>
-				<div class="col-lg-12">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="form-group">
-						<textarea name="comentario" placeholder="Comentario" maxlength="200" class="form-control"></textarea>
+						<textarea name="comentario" placeholder="Comentario" maxlength="200" rows="3" class="form-control"></textarea>
 					</div>
 				</div>
-				<div class="col-lg-12">
-					<input type="submit" name="crearIngreso" value="Nuevo Gasto" class="btn btn-lg btn-block btn-success">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<input type="submit" name="crearIngreso" value="Nuevo Ingreso" class="btn btn-lg btn-block btn-success">
 				</div>
 			</form>
 		</div>
 	</div>
+</div>
 
-	<div class="col-lg-4">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<h2 class="title-block">Evolución de Gastos</h2>
 		<div class="row">
 			<div class="col-lg-8">
 				<form class="form-inline">
 					<div class="form-group">
-						<label>Gastos de </label>
+						<label>Mostrar evolución de</label>
 						<select class="form-control" name="year" id="year">
 							@forelse ($years as $year)
 							<option value="{{ $year->year }}">{{ $year->year }}</option>
@@ -190,15 +203,15 @@
 				</form>
 			</div>
 		</div>
-		<div class="row">
-			<div id="chartStacked-container" class="col-lg-12 col-xs-12"></div>
-		</div>
-		<hr>
+	</div>
+</div>
+<div class="chart-container">
+	<canvas id="chartBarGastos"></canvas>
+</div>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<h2 class="title-block">Detalles de Gastos</h2>
-		<br>
-		<div class="row">
-			<div class="col-lg-12 col-xs-12" id="chartDoughnut-container"></div>
-		</div>
 		<div class="row">
 			<div class="col-lg-8">
 				<form class="form-inline">
@@ -217,5 +230,12 @@
 		</div>
 	</div>
 </div>
-
+<div class="chart-container">
+	<canvas id="chartDonutGastos"></canvas>
+</div>
 @endsection
+
+{{-- Se añade los scripts necesarios para la vista Ingresos --}}
+@push('scriptsGastos')
+<script src="js/scriptGastos.js"></script>
+@endpush

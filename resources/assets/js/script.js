@@ -204,10 +204,10 @@ $(function () {
 
 	/*
 		Se asigna widget 'DATEPICKER' al campo fecha del formulario
-		*/
-		$(".datepicker").datepicker({
-			dateFormat: "yy-mm-dd"
-		});
+	*/
+	$(".datepicker").datepicker({
+		dateFormat: "yy-mm-dd"
+	});
 
 	/////////////////////////////////////////////////
 
@@ -227,30 +227,30 @@ $(function () {
 		Se obtiene los tipos de gasto del usuario
 		*/
 
-		$(".dropdown-menu .tipo").click(function(event) {
-			event.preventDefault();
-			var tipo = $(this).text();
+	// 	$(".dropdown-menu .tipo").click(function(event) {
+	// 		event.preventDefault();
+	// 		var tipo = $(this).text();
 
-			$("#tipo, #tipoConcepto").val($(this).text());
+	// 		$("#tipo, #tipoConcepto").val($(this).text());
 
-		// Se carga los conceptos en base al tipo de concepto seleccionado
-		$.getJSON('/obtenerConceptos/gastos/tipo/'+tipo, function(data) {
-			// Primero se eliminan, si hubieran, los conceptos existentes
-			$("#dropdownConcepto li").remove();
+	// 	// Se carga los conceptos en base al tipo de concepto seleccionado
+	// 	$.getJSON('/obtenerConceptos/gastos/tipo/'+tipo, function(data) {
+	// 		// Primero se eliminan, si hubieran, los conceptos existentes
+	// 		$("#dropdownConcepto li").remove();
 			
-			$.each(data, function(index, val) {
-				conceptos.push(val.concepto);
+	// 		$.each(data, function(index, val) {
+	// 			conceptos.push(val.concepto);
 
-				$("<li>").append($("<a>").text(val['concepto']).addClass('concepto')).appendTo('#dropdownConcepto');
-			});
+	// 			$("<li>").append($("<a>").text(val['concepto']).addClass('concepto')).appendTo('#dropdownConcepto');
+	// 		});
 
-			$("#concepto, #formConcepto").autocomplete({
-				source: conceptos
-			});
+	// 		$("#concepto, #formConcepto").autocomplete({
+	// 			source: conceptos
+	// 		});
 
-			$("#dropdownConcepto").removeAttr('style');
-		});	
-	});
+	// 		$("#dropdownConcepto").removeAttr('style');
+	// 	});	
+	// });
 
 	/*
 		Se le añade al campo 'concepto' del formulario de ingreso la funcionalidad para obtener una
@@ -320,93 +320,93 @@ $(function () {
 					});
 
 					break;*/
-					case 'gastos':
-					var widthChart = $("#chartStacked-container").width();	// Ancho del contenedor CHART
-					var tipo       = $("#chartTipo").val();
-					var categorias = [];
-					var aux        = {};
-					var seriesname = [];
-					var ok         = true;
+					// case 'gastos':
+					// var widthChart = $("#chartStacked-container").width();	// Ancho del contenedor CHART
+					// var tipo       = $("#chartTipo").val();
+					// var categorias = [];
+					// var aux        = {};
+					// var seriesname = [];
+					// var ok         = true;
 
-					$.each(data, function(index, val) {
-						if (aux.month != val.month) {
-							// Se añade una nueva categoria
-							categorias.push({
-								label: meses[val.month-1]
-							})
-						}
+					// $.each(data, function(index, val) {
+					// 	if (aux.month != val.month) {
+					// 		// Se añade una nueva categoria
+					// 		categorias.push({
+					// 			label: meses[val.month-1]
+					// 		})
+					// 	}
 
-						indice = seriesname.findIndex(function(name){
-							return name.seriesname == this;
-						}, val.tipo);
+					// 	indice = seriesname.findIndex(function(name){
+					// 		return name.seriesname == this;
+					// 	}, val.tipo);
 
-						if (indice == -1) {
-							seriesname.push({
-								seriesname: val.tipo
-							});
-						}
+					// 	if (indice == -1) {
+					// 		seriesname.push({
+					// 			seriesname: val.tipo
+					// 		});
+					// 	}
 
-						aux = val;
-					});
+					// 	aux = val;
+					// });
 
-					$.each(seriesname, function(index1, name) {
-						values = [];
+					// $.each(seriesname, function(index1, name) {
+					// 	values = [];
 						
-						$.each(categorias, function(index2, categorias) {
-							ok = false;
-							$.each(data, function(index3, val) {
-								if (val.tipo == name.seriesname && meses[val.month-1] == categorias.label) {
-									values.push({
-										value: val.cantidad
-									});
-									ok = true;
-									return false;
-								}
-							});
+					// 	$.each(categorias, function(index2, categorias) {
+					// 		ok = false;
+					// 		$.each(data, function(index3, val) {
+					// 			if (val.tipo == name.seriesname && meses[val.month-1] == categorias.label) {
+					// 				values.push({
+					// 					value: val.cantidad
+					// 				});
+					// 				ok = true;
+					// 				return false;
+					// 			}
+					// 		});
 
-							if (!ok) {
-								values.push({
-									value: ""
-								});
-							}
-						});
+					// 		if (!ok) {
+					// 			values.push({
+					// 				value: ""
+					// 			});
+					// 		}
+					// 	});
 						
-						datos.push({
-							seriesname: name.seriesname,
-							data: values
-						});
+					// 	datos.push({
+					// 		seriesname: name.seriesname,
+					// 		data: values
+					// 	});
 
-					});
+					// });
 					
-					$("#chartStacked-container").insertFusionCharts({
-						type: "stackedcolumn2d",
-						width: widthChart,
-						height: "350",
-						dataFormat: "json",
-						dataSource: {
-							chart: {
-								caption: "Evolución del Año " + year,
-								subCaption: " ",
-								numberPrefix: "€",
-								showBorder: 0,
-								showCanvasBorder: 0,
-								bgColor: "#ffffff",
-								divLineDashed: 1,
-								showSum: 1,
-								theme: "fint",
-								legendBorderAlpha: 0,
-								legendShadow: 0,
-								plotBorderAlpha: 10,
-								showHoverEffect: 1
-							},
-							categories: [{
-								category: categorias
-							}],
-							dataset: datos
-						}
-					});
+					// $("#chartStacked-container").insertFusionCharts({
+					// 	type: "stackedcolumn2d",
+					// 	width: widthChart,
+					// 	height: "350",
+					// 	dataFormat: "json",
+					// 	dataSource: {
+					// 		chart: {
+					// 			caption: "Evolución del Año " + year,
+					// 			subCaption: " ",
+					// 			numberPrefix: "€",
+					// 			showBorder: 0,
+					// 			showCanvasBorder: 0,
+					// 			bgColor: "#ffffff",
+					// 			divLineDashed: 1,
+					// 			showSum: 1,
+					// 			theme: "fint",
+					// 			legendBorderAlpha: 0,
+					// 			legendShadow: 0,
+					// 			plotBorderAlpha: 10,
+					// 			showHoverEffect: 1
+					// 		},
+					// 		categories: [{
+					// 			category: categorias
+					// 		}],
+					// 		dataset: datos
+					// 	}
+					// });
 
-					break;
+					// break;
 					case 'ahorros':
 					var width = $("#chartAhorros-container").width();	// Ancho del contenedor CHART
 					

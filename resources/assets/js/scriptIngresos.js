@@ -1,18 +1,18 @@
 $(function(){
 	var ctx                   = $("#chartIngresos");	// Se obtiene el contexto o contenedor para el Chart
 	var ctxHeight             = ctx.height;	// Height del canvas
-	var uri                   = "http://gestiona.app/ingresosChart/";	// Dirección para obtener los datos del Chart
+	var uri                   = window.location.origin + window.location.pathname + "Chart/";	// Dirección para obtener los datos del Chart
 	var meses                 = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 	var yearDefault           = $("#year").val();	// Se obtiene el año seleccionado por defecto
 	var colors                = ['#008b8b', '#ff0000', '#008000', '#ffff00', '#00ffff', '#8b008b', '#dc143c', '#ff7f50', '#b22222', '#ffd700', '#808080', '#ffa500'];
-
+console.log(uri);
 	// Se crea la instancia de la clase Chart
 	var myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
 			labels: [],
 			datasets: [{
-				label: '',
+				label: "",
 				data: []
 			}]
 		},
@@ -53,14 +53,20 @@ $(function(){
 			},
 			legend: false,
 			tooltips: {
-				displayColors: false,
 				// Se incluye el símbolo de € en el label del tooltip
 				callbacks: {
 					label: function(tooltipItem, data){
 						return tooltipItem.yLabel + " €";
+					},
+					labelColor: function(tooltipItem, chart){
+						return {
+							borderColor: 'white',
+                        	backgroundColor: colors[tooltipItem.index]
+						}
 					}
 				}
-			}
+			},
+			maintainAspectRatio: false
 		}
 	});
 
@@ -80,16 +86,6 @@ $(function(){
 			let hoverBackgroundsColor   = [];	// Colores de fondo :hover asignados a cada item
 			let datos                   = [];	// Datos del chart
 			let labels                  = [];	// Labels del chart
-
-			// Se crea un array con las cantidades de los ingresos obtenidos
-			let values = $.map(data, function(item, index) {
-				return item.cantidad;
-			});
-			
-			// Se obtiene el valor mayor del array
-			let max = values.reduce(function(a, b){
-				return Math.max(a, b);
-			});
 
 			// Con los datos obtenidos se convierten para pasarlos como parametros del Chart
 			$.each(data, function(index, val){
@@ -139,7 +135,7 @@ $(function(){
 		$("#formConcepto").val($("#concepto-"+id).text());
 		$("#formFecha").val($("#fecha-"+id).text());
 		$("#formCantidad").val($("#cantidad-"+id+" span").text());
-		$("#formComentario").val($("#comentario-"+id).text());
+		$("#formComentario").val($("#comentario-"+id).attr('data-value'));
 
 		// Asignar el valor a la propiedad 'action' del formulario con el id del ingreso seleccionado
 		// $(".formEdit form").attr('action', );("/id/" + id + "/edit");

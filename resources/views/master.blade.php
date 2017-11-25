@@ -109,6 +109,7 @@
 	<script src="js/script.js"></script>
 	@stack('scriptsAjustes')
 	@stack('scriptsIngresos')
+	@stack('scriptsGastos')
 </body>
 
 <footer class="footer container">
