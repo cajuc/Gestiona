@@ -1,10 +1,9 @@
-$(function(){
-	var ctx                   = $("#chartIngresos");	// Se obtiene el contexto o contenedor para el Chart
-	var ctxHeight             = ctx.height;	// Height del canvas
-	var uri                   = window.location.origin + window.location.pathname + "Chart/";	// Dirección para obtener los datos del Chart
-	var meses                 = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-	var yearDefault           = $("#year").val();	// Se obtiene el año seleccionado por defecto
-	var colors                = ['#008b8b', '#ff0000', '#008000', '#ffff00', '#00ffff', '#8b008b', '#dc143c', '#ff7f50', '#b22222', '#ffd700', '#808080', '#ffa500'];
+$(function() {
+	var ctx         = $("#chartAhorros");
+	var uri         = window.location.origin + window.location.pathname + "Chart/";	// Dirección para obtener los datos del Chart
+	var meses       = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+	var yearDefault = $("#year").val();	// Se obtiene el año seleccionado por defecto
+	var colors      = ['#008b8b', '#ff0000', '#008000', '#ffff00', '#00ffff', '#8b008b', '#dc143c', '#ff7f50', '#b22222', '#ffd700', '#808080', '#ffa500'];
 
 	// Se crea la instancia de la clase Chart
 	var myChart = new Chart(ctx, {
@@ -19,6 +18,7 @@ $(function(){
 		options: {
 			scales: {
 				yAxes: [{
+					stacked: true,
 					ticks: {
 						beginAtZero:true,
 						// Incluir símbolo de €
@@ -28,6 +28,7 @@ $(function(){
 					}
 				}],
 				xAxes: [{
+					stacked: true,
 					gridLines: {
 						display: false
 					},
@@ -48,7 +49,7 @@ $(function(){
 				display: false
 			},
 			tooltips: {
-				// Se incluye el símbolo de € en el label del tooltip
+				// Se incluye el símbolo de € en el label del tooltip y se cambia el color del box
 				callbacks: {
 					label: function(tooltipItem, data){
 						return tooltipItem.yLabel + " €";
@@ -91,7 +92,7 @@ $(function(){
 
 				return;
 			}
-
+			
 			let bgColor                 = "";
 			let bgColorHover            = "";
 			let backgroundsColor        = [];	// Colores de fondo asignados a cada item del chart
@@ -134,63 +135,6 @@ $(function(){
 		// Se actualiza el chart
 		myChart.update();
 	}
-
-
-	/////////////////////////////////////////////////
-	
-	// Muestra el formulario para editar el ingreso/gasto seleccionado
-	
-	$(".editForm").click(function(event) {
-		let id = $(this).val();
-		let url = '/ingresos/';
-
-		$("#formConcepto").val($("#concepto-"+id).text());
-		$("#formFecha").val($("#fecha-"+id).text());
-		$("#formCantidad").val($("#cantidad-"+id+" span").text());
-		$("#formComentario").val($("#comentario-"+id).attr('data-value'));
-
-		// Asignar el valor a la propiedad 'action' del formulario con el id del ingreso seleccionado
-		// $(".formEdit form").attr('action', );("/id/" + id + "/edit");
-		$(".formEdit form").attr('action', url + id + "/edit");
-
-		// Se despliega el formulario
-		$(".formEdit").fadeIn('slow');
-	});
-
-	
-	// Oculta el formulario de edición de ingresos/gastos
-
-	$("#cerrarForm").click(function(event) {
-		$(".formEdit").fadeOut('slow');
-	});
-
-
-	/////////////////////////////////////////////////
-
-	/*
-		Se le añade al campo 'concepto' del formulario de ingreso la funcionalidad para obtener una
-		lista de valores que el usario ha introducido anteriormente como concepto
-	*/
-	$.getJSON('/obtenerConceptos/ingresos', function(data) {
-		let conceptos = [];
-		
-		$.each(data, function(index, val) {
-			conceptos.push(val.concepto);
-		});
-
-		$("#concepto, #formConcepto").autocomplete({
-			source: conceptos
-		});
-	});
-	
-	// Se obtiene los conceptos de ingresos del usuario
-	$(".concepto").click(function(event) {
-		event.preventDefault();
-
-		$("#concepto").val($(this).text());
-		$("#dropdown-menu").toggle();
-	});
-
 
 	/////////////////////////////////////////////////
 

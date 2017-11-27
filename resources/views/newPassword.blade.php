@@ -11,7 +11,7 @@
 		<h1 class="text-center">Introduce la nueva contraseña</h1>
 
 		<div class="col-lg-4 col-lg-offset-4">
-			<form action="newPassword" method="post">
+			<form action="{{ url('/newPassword') }}" method="post">
 				{{ csrf_field() }}
 				<input type="hidden" name="userEmail" value="{{ $email }}">
 				<div class="form-group">

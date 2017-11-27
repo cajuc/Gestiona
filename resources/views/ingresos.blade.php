@@ -2,7 +2,7 @@
 @section('title', $title)
 @section('content-body')
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
 		<h2 class="title-block">Historial de Ingresos</h2>
 		@if (Session::get('message'))
 		@if (Session::get('class'))
@@ -30,10 +30,10 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th class="col-sm-2 col-md-2 col-lg-3">Concepto</th>
+						<th class="col-sm-3 col-md-3 col-lg-3">Concepto</th>
 						<th class="col-sm-2 col-md-2 col-lg-2">Fecha</th>
-						<th class="col-sm-2 col-md-2 col-lg-2">Cantidad</th>
-						<th class="col-sm-5 col-md-5 col-lg-4">Comentario</th>
+						<th class="col-sm-1 col-md-1 col-lg-1">Cantidad</th>
+						<th class="col-sm-5 col-md-5 col-lg-5">Comentario</th>
 						<th class="col-sm-1 col-md-1 col-lg-1"></th>
 					</tr>
 				</thead>
@@ -119,8 +119,8 @@
 		
 	</div>
 
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-		<h2 class="title-block">Crear nuevo ingreso</h2>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+		<h2 class="title-block">Nuevo Ingreso</h2>
 		<div class="row">
 			<form action="{{ url('/') }}/ingresos/crear" method="post">
 				{{ csrf_field() }}
@@ -141,7 +141,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-xs-12 col-sm-6 col-md-3 col-lg-6">
+				<div class="col-xs-12 col-sm-6 col-md-3 col-lg-12">
 					<div class="form-group">
 						<div class="input-group">
 							<span class="input-group-addon glyphicon glyphicon-calendar" id="calendar-addon"></span>
@@ -149,7 +149,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-xs-12 col-sm-6 col-md-3 col-lg-6">
+				<div class="col-xs-12 col-sm-6 col-md-3 col-lg-12">
 					<div class="form-group">
 						<div class="input-group">
 							<span class="input-group-addon glyphicon glyphicon-euro" id="cantidad-addon"></span>

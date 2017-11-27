@@ -34,6 +34,11 @@ textarea {
   margin-top: 20px;
 }
 
+.logout-sm button {
+  background: #fff;
+  color: #636b6f;
+}
+
 .brand-image {
   width: 30px;
   height: 30px;
@@ -50,6 +55,10 @@ textarea {
 
 .perfil button:hover {
   color: red !important;
+}
+
+.perfil .pull-right {
+  line-height: 45px;
 }
 
 .menu-nav {

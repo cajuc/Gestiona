@@ -4,6 +4,7 @@
     "/css/style.css": "/css/style.css",
     "/js/scriptIngresos.js": "/js/scriptIngresos.js",
     "/js/scriptGastos.js": "/js/scriptGastos.js",
+    "/js/scriptAhorros.js": "/js/scriptAhorros.js",
     "/js/script.js": "/js/script.js",
     "/js/jquery.custom-file-input.js": "/js/jquery.custom-file-input.js"
 }

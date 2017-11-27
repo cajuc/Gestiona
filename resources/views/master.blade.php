@@ -85,9 +85,9 @@
 								</li>
 							</ul>
 							
-							<form class="navbar-right visible-sm" action="logout" method="post">
+							<form class="pull-right visible-sm logout-sm" action="logout" method="post">
 								{{ csrf_field() }}
-								<button type="submit" class="btn btn-lg btn-link" title="Salir">
+								<button type="submit" class="btn btn-lg" title="Salir" title="Salir">
 									<span class="glyphicon glyphicon-log-out"></span>
 								</button>
 							</form>
@@ -110,6 +110,7 @@
 	@stack('scriptsAjustes')
 	@stack('scriptsIngresos')
 	@stack('scriptsGastos')
+	@stack('scriptsAhorros')
 </body>
 
 <footer class="footer container">

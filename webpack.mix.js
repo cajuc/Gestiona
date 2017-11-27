@@ -16,5 +16,6 @@ mix.js('resources/assets/js/app.js', 'public/js')
 	.js('resources/assets/js/jquery.custom-file-input.js', 'public/js')
 	.js('resources/assets/js/scriptIngresos.js', 'public/js')
 	.js('resources/assets/js/scriptGastos.js', 'public/js')
+	.js('resources/assets/js/scriptAhorros.js', 'public/js')
 	.sass('resources/assets/sass/app.scss','public/css')
 	.sass('resources/assets/sass/style.scss','public/css');
