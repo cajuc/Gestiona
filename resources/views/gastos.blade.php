@@ -24,11 +24,11 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th class="col-sm-1 col-md-1 col-lg-2">Tipo</th>
-						<th class="col-sm-2 col-md-2 col-lg-3">Concepto</th>
-						<th class="col-sm-2 col-md-2 col-lg-1">Fecha</th>
+						<th class="col-sm-2 col-md-2 col-lg-2">Tipo</th>
+						<th class="col-sm-3 col-md-3 col-lg-3">Concepto</th>
+						<th class="col-sm-1 col-md-1 col-lg-1">Fecha</th>
 						<th class="col-sm-1 col-md-1 col-lg-1">Cantidad</th>
-						<th class="col-sm-5 col-md-5 col-lg-4">Comentario</th>
+						<th class="col-sm-4 col-md-4 col-lg-4">Comentario</th>
 						<th class="col-sm-1 col-md-1 col-lg-1"></th>
 					</tr>
 				</thead>
@@ -120,7 +120,7 @@
 	</div>
 
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-		<h2 class="title-block">Crear nuevo gasto</h2>
+		<h2 class="title-block">Nuevo gasto</h2>
 		<div class="row">
 			<form action="{{ url('/') }}/gastos/crear" method="post">
 				{{ csrf_field() }}
@@ -177,7 +177,7 @@
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<input type="submit" name="crearIngreso" value="Nuevo Ingreso" class="btn btn-lg btn-block btn-success">
+					<input type="submit" name="crearGasto" value="Nuevo Gasto" class="btn btn-lg btn-block btn-success">
 				</div>
 			</form>
 		</div>
@@ -230,12 +230,12 @@
 		</div>
 	</div>
 </div>
-<div class="chart-container">
+<div class="chart-container chart-donut">
 	<canvas id="chartDonutGastos"></canvas>
 </div>
 @endsection
 
-{{-- Se añade los scripts necesarios para la vista Ingresos --}}
+{{-- Se añade los scripts necesarios para la vista Gastos --}}
 @push('scriptsGastos')
 <script src="js/scriptGastos.js"></script>
 @endpush

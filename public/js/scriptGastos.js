@@ -79,8 +79,6 @@ module.exports = __webpack_require__(226);
 $(function () {
 	var ctxBar = $("#chartBarGastos"); // Se obtiene el contexto o contenedor para el Chart tipo Bar
 	var ctxDonut = $("#chartDonutGastos"); // Se obtiene el contexto o contenedor para el Chart tipo Donut
-	var ctxBarHeight = ctxBar.height; // Height del canvas
-	var ctxDonutHeight = ctxDonut.height; // Height del canvas
 	var uri = window.location.origin + window.location.pathname; // Dirección para obtener los datos del Chart
 	var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 	var yearDefault = $("#year").val(); // Se obtiene el año seleccionado por defecto
@@ -105,15 +103,8 @@ $(function () {
 						beginAtZero: true,
 						// Incluir símbolo de €
 						callback: function callback(value, index, values) {
-							if (index == values.length - 1) {
-								return value + " €";
-							}
-
-							return value;
+							return value + " €";
 						}
-					},
-					gridLines: {
-						display: false
 					}
 				}],
 				xAxes: [{
@@ -219,6 +210,20 @@ $(function () {
 		var year = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : yearDefault;
 
 		$.getJSON(uri + "Chart/" + year, function (data) {
+			// En caso de no obtener datos se mostrará una alerta
+			if (!data.length) {
+				// Se eliminan los alert que ya existan
+				$(".chart-container div").remove();
+
+				$("<div>").addClass('alert alert-info text-center').text('No hay datos para mostrar').appendTo('.chart-container');
+
+				// Se oculta el canvas
+				ctxBar.hide();
+				ctxBar.parent().css('height', 'auto');
+
+				return;
+			}
+
 			var bgColor = "";
 			var bgColorHover = "";
 			var datos = []; // Datos del chart
@@ -282,6 +287,22 @@ $(function () {
 
 		// Se obtienen los datos para mostrar el Chart Doughnut con los detalles de los gastos
 		$.getJSON(uri + 'ChartDoughnut/' + year + '/tipo/' + tipo, function (data) {
+			// En caso de no obtener datos se mostrará una alerta
+			if (!data.length) {
+				// Se eliminan los alert que ya existan
+				$(".chart-container.chart-donut div").remove();
+
+				$("<div>").addClass('alert alert-info text-center').text('No hay datos para mostrar').appendTo('.chart-container.chart-donut');
+
+				// Se oculta el canvas
+				ctxDonut.hide();
+				ctxDonut.parent().css('height', 'auto');
+
+				return;
+			} else {
+				ctxDonut.show();
+			}
+
 			var bgColor = "";
 			var bgColorHover = "";
 			var datos = [];

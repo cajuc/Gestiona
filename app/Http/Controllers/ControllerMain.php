@@ -77,7 +77,7 @@ class ControllerMain extends Controller
 	*/
 	public function editarIngreso(Request $request, $id){
 		$validator = Validator::make($request->all(), [
-			'concepto' 		=> 'required|max:30',
+			'concepto' 		=> 'required|string|max:30',
 			'fecha'			=> 'required|date_format:Y-m-d',
 			'cantidad'		=> 'required|numeric'
 		]);
@@ -126,7 +126,7 @@ class ControllerMain extends Controller
 	*/
 	public function crearIngreso(Request $request){
 		$validator = Validator::make($request->all(), [
-			'concepto' 		=> 'required|alpha|max:30',
+			'concepto' 		=> 'required|string|max:30',
 			'fecha'			=> 'required|date_format:Y-m-d',
 			'cantidad'		=> 'required|numeric'
 		]);
@@ -234,6 +234,7 @@ class ControllerMain extends Controller
 			'tipo'			=> 'required',
 			'concepto' 		=> [
 				'required',
+				'string',
 				'max:30',
 				Rule::unique('gastos')->where(function($query) use ($request, $id){
 					$query
@@ -299,7 +300,7 @@ class ControllerMain extends Controller
 
 		$validator = Validator::make($request->all(), [
 			'tipo'			=> 'required',
-			'concepto' 		=> 'required|alpha|max:30',
+			'concepto' 		=> 'required|string|max:30',
 			'fecha'			=> 'required|date_format:Y-m-d',
 			'cantidad'		=> 'required|numeric|max:'.$user->fondos
 		]);

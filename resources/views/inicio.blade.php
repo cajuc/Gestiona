@@ -5,7 +5,9 @@
 	<div class="col-lg-12">
 		<div class="row father">
 			<div class="col-xs-12 visible-xs text-center">
-				<span class="glyphicon glyphicon-euro" style="font-size: 2em; color: green;"></span>
+				<a href="{{ url('/ingresos') }}">
+					<span class="glyphicon glyphicon-euro" style="font-size: 2em; color: green;"></span>
+				</a>
 			</div>
 			<div class="col-lg-9 col-sm-9 description">
 				<p class="hidden-xs text-justify">
@@ -17,16 +19,22 @@
 				</p>
 			</div>
 			<div class="col-lg-3 col-sm-3 text-center child-right hidden-xs">
-				<span class="glyphicon glyphicon-euro" style="font-size: 4em; color: green;"></span>
+				<a href="{{ url('/ingresos') }}">
+					<span class="glyphicon glyphicon-euro" style="font-size: 4em; color: green;"></span>
+				</a>
 			</div>
 		</div>
 
 		<div class="row father">
 			<div class="col-xs-12 visible-xs text-center">
-				<span class="glyphicon glyphicon-remove" style="font-size: 2em; color: red;"></span>
+				<a href="{{ url('/gastos') }}">
+					<span class="glyphicon glyphicon-remove" style="font-size: 2em; color: red;"></span>
+				</a>
 			</div>
 			<div class="col-lg-3 col-sm-3 text-center child-left hidden-xs">
-				<span class="glyphicon glyphicon-remove" style="font-size: 4em; color: red;"></span>
+				<a href="{{ url('/gastos') }}">
+					<span class="glyphicon glyphicon-remove" style="font-size: 4em; color: red;"></span>
+				</a>
 			</div>
 			<div class="col-lg-9 col-sm-9 description-right">
 				<p class="hidden-xs text-justify">
@@ -40,7 +48,9 @@
 
 		<div class="row father">
 			<div class="col-xs-12 visible-xs text-center">
-				<span class="glyphicon glyphicon-piggy-bank" style="font-size: 2em; color: pink;"></span>
+				<a href="{{ url('/ahorros') }}">
+					<span class="glyphicon glyphicon-piggy-bank" style="font-size: 2em; color: pink;"></span>
+				</a>
 			</div>
 			<div class="col-lg-9 col-sm-9 description">
 				<p class="hidden-xs text-justify">
@@ -51,16 +61,22 @@
 				</p>
 			</div>
 			<div class="col-lg-3 col-sm-3 text-center child-right hidden-xs">
-				<span class="glyphicon glyphicon-piggy-bank" style="font-size: 4em; color: pink;"></span>
+				<a href="{{ url('/ahorros') }}">
+					<span class="glyphicon glyphicon-piggy-bank" style="font-size: 4em; color: pink;"></span>
+				</a>
 			</div>
 		</div>
 
 		<div class="row father">
 			<div class="col-xs-12 visible-xs text-center">
-				<span class="glyphicon glyphicon-cog" style="font-size: 2em; color: black;"></span>
+				<a href="{{ url('/ajustes') }}">
+					<span class="glyphicon glyphicon-cog" style="font-size: 2em; color: black;"></span>
+				</a>
 			</div>
 			<div class="col-lg-3 col-sm-3 text-center child-left hidden-xs">
-				<span class="glyphicon glyphicon-cog" style="font-size: 4em; color: black;"></span>
+				<a href="{{ url('/ajustes') }}">
+					<span class="glyphicon glyphicon-cog" style="font-size: 4em; color: black;"></span>
+				</a>
 			</div>
 			<div class="col-lg-9 col-sm-9 description-right">
 				<p class="hidden-xs text-justify">

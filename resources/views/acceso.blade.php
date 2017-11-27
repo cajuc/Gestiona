@@ -62,7 +62,7 @@
 							<h3 class="text-center panel-title">Crea tu cuenta</h3>
 						</div>
 						<div class="panel-body">
-							<form action="registro" method="post">
+							<form action="{{ url('/registro') }}" method="post">
 								{{ csrf_field() }}
 								<div class="form-group">
 									<input type="text" id="nombre" name="registroNombre" class="form-control" value="" placeholder="Nombre">

@@ -60,25 +60,24 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 223);
+/******/ 	return __webpack_require__(__webpack_require__.s = 227);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 223:
+/***/ 227:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(224);
+module.exports = __webpack_require__(228);
 
 
 /***/ }),
 
-/***/ 224:
+/***/ 228:
 /***/ (function(module, exports) {
 
 $(function () {
-	var ctx = $("#chartIngresos"); // Se obtiene el contexto o contenedor para el Chart
-	var ctxHeight = ctx.height; // Height del canvas
+	var ctx = $("#chartAhorros");
 	var uri = window.location.origin + window.location.pathname + "Chart/"; // Dirección para obtener los datos del Chart
 	var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 	var yearDefault = $("#year").val(); // Se obtiene el año seleccionado por defecto
@@ -97,6 +96,7 @@ $(function () {
 		options: {
 			scales: {
 				yAxes: [{
+					stacked: true,
 					ticks: {
 						beginAtZero: true,
 						// Incluir símbolo de €
@@ -106,6 +106,7 @@ $(function () {
 					}
 				}],
 				xAxes: [{
+					stacked: true,
 					gridLines: {
 						display: false
 					},
@@ -126,7 +127,7 @@ $(function () {
 				display: false
 			},
 			tooltips: {
-				// Se incluye el símbolo de € en el label del tooltip
+				// Se incluye el símbolo de € en el label del tooltip y se cambia el color del box
 				callbacks: {
 					label: function label(tooltipItem, data) {
 						return tooltipItem.yLabel + " €";
@@ -211,59 +212,6 @@ $(function () {
 		// Se actualiza el chart
 		myChart.update();
 	}
-
-	/////////////////////////////////////////////////
-
-	// Muestra el formulario para editar el ingreso/gasto seleccionado
-
-	$(".editForm").click(function (event) {
-		var id = $(this).val();
-		var url = '/ingresos/';
-
-		$("#formConcepto").val($("#concepto-" + id).text());
-		$("#formFecha").val($("#fecha-" + id).text());
-		$("#formCantidad").val($("#cantidad-" + id + " span").text());
-		$("#formComentario").val($("#comentario-" + id).attr('data-value'));
-
-		// Asignar el valor a la propiedad 'action' del formulario con el id del ingreso seleccionado
-		// $(".formEdit form").attr('action', );("/id/" + id + "/edit");
-		$(".formEdit form").attr('action', url + id + "/edit");
-
-		// Se despliega el formulario
-		$(".formEdit").fadeIn('slow');
-	});
-
-	// Oculta el formulario de edición de ingresos/gastos
-
-	$("#cerrarForm").click(function (event) {
-		$(".formEdit").fadeOut('slow');
-	});
-
-	/////////////////////////////////////////////////
-
-	/*
- 	Se le añade al campo 'concepto' del formulario de ingreso la funcionalidad para obtener una
- 	lista de valores que el usario ha introducido anteriormente como concepto
- */
-	$.getJSON('/obtenerConceptos/ingresos', function (data) {
-		var conceptos = [];
-
-		$.each(data, function (index, val) {
-			conceptos.push(val.concepto);
-		});
-
-		$("#concepto, #formConcepto").autocomplete({
-			source: conceptos
-		});
-	});
-
-	// Se obtiene los conceptos de ingresos del usuario
-	$(".concepto").click(function (event) {
-		event.preventDefault();
-
-		$("#concepto").val($(this).text());
-		$("#dropdown-menu").toggle();
-	});
 
 	/////////////////////////////////////////////////
 
